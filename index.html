@@ -7,11 +7,28 @@
     <script src="components/loader.js"></script>
     <link rel="stylesheet" href="components/loader.css">
     <link rel="stylesheet" href="css/style.css">
-    <script>
+    <script type="application/javascript">
+      function draw() {
+        var canvas = document.getElementById("canvas");
+        if (canvas.getContext) {
+          var ctx = canvas.getContext("2d");
 
+          ctx.fillStyle = "rgb(200, 0, 0)";
+          ctx.fillRect(10, 10, 50, 50);
+
+          ctx.fillStyle = "rgba(0, 0, 200, 0.5)";
+          ctx.fillRect(30, 30, 50, 50);
+        }
+      }
     </script>
 </head>
-<body>
+<body onload="draw();">
+
+    <canvas id="canvas" width="150" height="150">
+
+	    
+    </canvas>
+
 <h1>KFです。</h1>
 	<br />
     プログラミングを始めました。<br />
@@ -20,11 +37,6 @@
 私のおすすめの宿は <a href="https://www.suigekka.jp">水月花</a> ですよ。
 <br />
 新しいページは<a href="./newPage.html">こちら</a>です。<br>
-現在の株価: $3.15 + 0.1<br>
-<canvas id="stockGraph" width="150" height="150">
-  現在の株価: $3.15 + 0.15
-</canvas>
-現在の株価: $3.15 + 0.2<br>
 
 </body>
 </html>
