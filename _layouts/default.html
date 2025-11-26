@@ -1,1 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ page.title }}</title> <style>
+        /* ここにレイアウト用のCSS（横並びなど）を書きます */
+        body { display: flex; margin: 0; min-height: 100vh; }
+        nav { width: 250px; background: #eee; padding: 20px; }
+        main { flex: 1; padding: 20px; }
+    </style>
+</head>
+<body>
 
+    <nav>
+        <ul>
+            <li><a href="/index.html">ホーム</a></li>
+            <li><a href="/page1.html">ページ1</a></li>
+            <li><a href="/page2.html">ページ2</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        {{ content }}
+    </main>
+
+</body>
+</html>
