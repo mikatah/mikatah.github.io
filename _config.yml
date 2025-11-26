@@ -1,5 +1,15 @@
-title: 私のWebサイト
-description: 複数のページをまとめたサイトです
-theme: jekyll-theme-primer # GitHub風のシンプルなテーマ
-# または
-# theme: minima
+title: 私のドキュメントサイト
+description: 複数のページを階層化して管理するサイト
+url: "https://[あなたのユーザー名].github.io" # あなたのURLに合わせて変更
+baseurl: "/[リポジトリ名]" # リポジトリ名に合わせて変更（例: /my-site）
+
+# Google Sitesのようなサイドバーを実現するテーマ
+remote_theme: just-the-docs/just-the-docs
+
+# サイドバーの設定
+search_enabled: true      # 検索窓をつける
+heading_anchors: true     # 見出しにリンクを自動でつける
+
+# 以下の設定でサイドバーの階層化を有効にします
+aux_links:
+  GitHubリポジトリ: https://github.com/[ユーザー名]/[リポジトリ名]
