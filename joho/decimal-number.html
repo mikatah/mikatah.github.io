@@ -131,7 +131,7 @@
     width: 100%;
     max-width: 960px; /* 【変更】幅を広げる（赤枠約290px × 3 + α） */
     min-width: 920px; /* 【変更】最小幅を確保して赤枠がはみ出さないようにする */
-    height: 400px;
+    height: 500px; /* 【変更】高さを400pxから500pxへ拡大 */
     margin: 0 auto;
     background-color: white;
     border: 4px solid #4DD0E1;
@@ -141,7 +141,7 @@
   }
 
   @media (max-width: 600px) {
-    #stage { height: 450px; }
+    #stage { height: 550px; } /* 【変更】スマホ時はさらに少し高く */
     .main-controls { gap: 10px; }
     button { min-width: 100px; padding: 10px 15px; font-size: 14px; }
   }
@@ -691,7 +691,7 @@ async function animateStep2to3() {
     <span style="color:#1E88E5; font-size:1.1em;">10個のかたまり： ${finalTens}個</span><br>
     <span style="color:#FBC02D; font-size:1.1em; text-shadow:1px 1px 0 #eee;">1個： ${finalOnes}個</span>
     <br>
-    <span style="font-size:24px; color:#333; display:block; margin-top:5px;">正解は ${totalNumber} です！</span>
+    <span style="font-size:20px; color:#333; display:block; margin-top:5px;">10進数ではこのように10個ずつまとめて、数を表現しています。</span>
   `;
 }
 
