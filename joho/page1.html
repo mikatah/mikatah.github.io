@@ -1,39 +1,31 @@
 ---
 layout: default
-title: プロジェクト概要
+title: 10進数の数え方アニメーション
 ---
 
-<h2>プロジェクトの概要</h2>
-
-<p>
-    
-    
-    <!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>10進数の数え方アニメーション</title>
-<!-- Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+
 <style>
   :root {
-    --transition-speed: 0.8s; /* JSで書き換えます */
+    --transition-speed: 0.8s;
   }
 
-  body {
+  /* 【重要】body ではなく、このアプリ専用のクラスに対してスタイルを当てます */
+  .app-container {
     font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", sans-serif;
     text-align: center;
     margin: 0;
     padding: 10px;
     background-color: #e0f7fa;
     color: #333;
-    overflow-x: auto; /* 【変更】横スクロールを許可 */
+    overflow-x: auto;
+    border-radius: 8px; /* デザイン調整 */
   }
 
-  h1 { margin: 10px 0 15px; font-size: 22px; color: #006064; }
+  /* h1 もこの中だけに適用されるように限定します */
+  .app-container h1 { margin: 10px 0 15px; font-size: 22px; color: #006064; }
   
   /* コントロール全体 */
   .controls-wrapper {
@@ -139,9 +131,9 @@ title: プロジェクト概要
   #stage {
     position: relative;
     width: 100%;
-    max-width: 960px; /* 【変更】幅を広げる（赤枠約290px × 3 + α） */
-    min-width: 920px; /* 【変更】最小幅を確保して赤枠がはみ出さないようにする */
-    height: 500px; /* 【変更】高さを400pxから500pxへ拡大 */
+    max-width: 960px;
+    min-width: 920px;
+    height: 500px;
     margin: 0 auto;
     background-color: white;
     border: 4px solid #4DD0E1;
@@ -151,7 +143,7 @@ title: プロジェクト概要
   }
 
   @media (max-width: 600px) {
-    #stage { height: 550px; } /* 【変更】スマホ時はさらに少し高く */
+    #stage { height: 550px; }
     .main-controls { gap: 10px; }
     button { min-width: 100px; padding: 10px 15px; font-size: 14px; }
   }
@@ -186,7 +178,7 @@ title: プロジェクト概要
   .dot {
     width: 14px;
     height: 14px;
-    background-color: #FFE082; /* 薄い黄色 */
+    background-color: #FFE082;
     border-radius: 50%;
     position: absolute;
     transition-property: left, top, transform, background-color, border-color;
@@ -213,7 +205,7 @@ title: プロジェクト概要
   .group-box-100 {
     position: absolute;
     border: 3px solid #e53935;
-    background-color: white; /* 背景を白にして下の重なりを隠す */
+    background-color: white;
     border-radius: 8px;
     transition: opacity 0.5s;
     opacity: 0;
@@ -245,49 +237,48 @@ title: プロジェクト概要
     font-size: 1.2em;
   }
 </style>
-</head>
-<body>
 
-<h1>10進数の数え方アニメーション</h1>
 
-<div class="controls-wrapper">
-  <!-- 速度調整 -->
-  <div class="speed-switch">
-    <label>
-      <input type="radio" name="speed" value="normal" checked>
-      <span class="speed-label">ふつう</span>
-    </label>
-    <label>
-      <input type="radio" name="speed" value="slow">
-      <span class="speed-label">ゆっくり</span>
-    </label>
-  </div>
+<div class="app-container">
 
-  <!-- メイン操作 -->
-  <div class="main-controls">
-    <button id="backBtn" disabled>◀ もどる</button>
-    
-    <div>
-      <span style="font-size:12px; color:#666; display:block; margin-bottom:2px;">かず (最大300)</span>
-      <input type="number" id="numInput" min="1" max="300" value="123">
+    <h1>10進数の数え方アニメーション</h1>
+
+    <div class="controls-wrapper">
+      <div class="speed-switch">
+        <label>
+          <input type="radio" name="speed" value="normal" checked>
+          <span class="speed-label">ふつう</span>
+        </label>
+        <label>
+          <input type="radio" name="speed" value="slow">
+          <span class="speed-label">ゆっくり</span>
+        </label>
+      </div>
+
+      <div class="main-controls">
+        <button id="backBtn" disabled>◀ もどる</button>
+        
+        <div>
+          <span style="font-size:12px; color:#666; display:block; margin-bottom:2px;">かず (最大300)</span>
+          <input type="number" id="numInput" min="1" max="300" value="123">
+        </div>
+
+        <button id="nextBtn">スタート ▶</button>
+      </div>
     </div>
 
-    <button id="nextBtn">スタート ▶</button>
-  </div>
-</div>
+    <div id="result">かずを決めたらスタートを押してね！</div>
 
-<div id="result">かずを決めたらスタートを押してね！</div>
+    <div id="stage">
+      <div class="divider" style="left: 33.33%;"></div>
+      <div class="divider" style="left: 66.66%;"></div>
+      
+      <div id="label-100" class="zone-label">100のくらい</div>
+      <div id="label-10" class="zone-label">10のくらい</div>
+      <div id="label-1" class="zone-label">1のくらい</div>
+    </div>
 
-<div id="stage">
-  <div class="divider" style="left: 33.33%;"></div>
-  <div class="divider" style="left: 66.66%;"></div>
-  
-  <div id="label-100" class="zone-label">100のくらい</div>
-  <div id="label-10" class="zone-label">10のくらい</div>
-  <div id="label-1" class="zone-label">1のくらい</div>
-</div>
-
-<script>
+</div> <script>
 // --- 定数・設定 ---
 const DOT_SIZE = 14;
 const GAP = 4;
@@ -798,18 +789,3 @@ function arrangeLooseDots(dots, startIndex, instant = false) {
   }
 }
 </script>
-</body>
-</html>
-    
-    
-    ここはページ1です。あなたがGoogle Sitesで書いていたコードをここに貼ります。</p>
-
-<div style="background:#eef; padding:15px; border:1px solid #ccf;">
-    <p>例えば、こういう複雑なデザインのHTMLタグも...</p>
-    <button>ボタン</button>
-    <ul>
-        <li>リスト1</li>
-        <li>リスト2</li>
-    </ul>
-    <p>そのまま貼るだけで、左メニュー付きのページとして表示されます！</p>
-</div>
