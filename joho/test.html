@@ -20,7 +20,7 @@
     padding: 10px;
     background-color: #e0f7fa;
     color: #333;
-    overflow-x: hidden;
+    overflow-x: auto; /* 【変更】横スクロールを許可 */
   }
 
   h1 { margin: 10px 0 15px; font-size: 22px; color: #006064; }
@@ -129,7 +129,8 @@
   #stage {
     position: relative;
     width: 100%;
-    max-width: 800px;
+    max-width: 960px; /* 【変更】幅を広げる（赤枠約290px × 3 + α） */
+    min-width: 920px; /* 【変更】最小幅を確保して赤枠がはみ出さないようにする */
     height: 400px;
     margin: 0 auto;
     background-color: white;
@@ -189,7 +190,7 @@
   .group-box-10 {
     position: absolute;
     border: 2px solid #1E88E5;
-    background-color: white; /* 【変更】背景を白にして、10の枠同士の重なりや、100の中で枠線が見えるようにする */
+    background-color: white;
     border-radius: 6px;
     transition-property: all;
     transition-timing-function: ease;
