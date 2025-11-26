@@ -1,7 +1,7 @@
 title: 私のドキュメントサイト
 description: 複数のページを階層化して管理するサイト
-url: "https://[あなたのユーザー名].github.io" # あなたのURLに合わせて変更
-baseurl: "/[リポジトリ名]" # リポジトリ名に合わせて変更（例: /my-site）
+url: "https://mikatah.github.io" # あなたのURLに合わせて変更
+baseurl: "/joho" # リポジトリ名に合わせて変更（例: /my-site）
 
 # Google Sitesのようなサイドバーを実現するテーマ
 remote_theme: just-the-docs/just-the-docs
