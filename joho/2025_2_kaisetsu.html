@@ -1,1 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>右クリック禁止サイト</title>
+    
+    <style>
+        /* 1. CSSでテキスト選択を禁止 */
+        body {
+            /* 主要ブラウザ向けの指定 */
+            -webkit-user-select: none; /* Safari/Chrome */
+            -moz-user-select: none;    /* Firefox */
+            -ms-user-select: none;     /* IE/Edge */
+            user-select: none;         /* 標準 */
+            
+            /* 文字の見た目の設定 */
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 50px;
+        }
+    </style>
+</head>
+<body>
 
+    <h1>Hello World!</h1>
+    <p>このテキストは選択・コピーができません。</p>
+
+    <script>
+        // 2. JavaScriptで右クリック操作を禁止
+        document.addEventListener('contextmenu', function(e) {
+            // 右クリックが発生したときに、デフォルトの動作（メニュー表示）をキャンセルする
+            e.preventDefault();
+        });
+
+        // 3. (補足) キーボードのショートカット（F12、Ctrl+Uなど）を禁止
+        // ※この機能は生徒の操作を妨害しすぎるため、実運用では非推奨の場合があります。
+        document.addEventListener('keydown', function(e) {
+            // F12キー (開発者ツールの起動)
+            if (e.key === 'F12') {
+                e.preventDefault();
+            }
+            // Ctrl+Shift+I (開発者ツールの起動)
+            if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+                e.preventDefault();
+            }
+            // Ctrl+U (ソースコード表示)
+            if (e.ctrlKey && e.key === 'U') {
+                e.preventDefault();
+            }
+        });
+    </script>
+
+</body>
+</html>
