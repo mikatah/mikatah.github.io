@@ -1,1 +1,310 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>コンピュータの進化：学習用イラスト</title>
+    
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Zen Maru Gothic', 'sans-serif'],
+                    },
+                    colors: {
+                        paper: '#fdfbf7', // クリーム色の紙
+                        ink: '#2c3e50',   // 濃い鉛筆色
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body { 
+            background-color: #fdfbf7; 
+            color: #2c3e50;
+            /* 方眼紙のような背景パターン */
+            background-image: 
+                linear-gradient(#e5e7eb 1px, transparent 1px),
+                linear-gradient(90deg, #e5e7eb 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        /* 印刷設定 */
+        @page { size: A4; margin: 0; }
+        @media print {
+            body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .no-print { display: none; }
+        }
+        /* 手書き風のボックス線 */
+        .hand-drawn-box {
+            border: 2px solid #2c3e50;
+            border-radius: 2px 255px 3px 25px / 255px 5px 225px 5px;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // --- アイコン (Lucide React icons copied as SVG) ---
+        const IconBase = ({ children, size = 24, className = "" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={className}>{children}</svg>
+        );
+        // アイコン定義は前回と同じものを使用（省略せず記載）
+        const Cpu = (props) => <IconBase {...props}><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></IconBase>;
+        const Smartphone = (props) => <IconBase {...props}><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></IconBase>;
+        const BrainCircuit = (props) => <IconBase {...props}><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/><path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"/><path d="M17.599 6.5a3 3 0 0 0 .399-1.375"/><path d="M6.003 5.125A3 3 0 0 0 6.401 6.5"/><path d="M3.477 10.896a4 4 0 0 1 .585-.396"/><path d="M19.938 10.5a4 4 0 0 1 .585.396"/><path d="M6 18a4 4 0 0 1-1.97-3.284"/><path d="M17.97 14.716A4 4 0 0 1 16 18"/></IconBase>;
+        const Glasses = (props) => <IconBase {...props}><circle cx="6" cy="15" r="4"/><circle cx="18" cy="15" r="4"/><path d="M14 15a2 2 0 0 0-2-2 2 2 0 0 0-2 2"/><path d="M2.5 13 5 7c.7-1.3 1.4-2 3-2"/><path d="M21.5 13 19 7c-.7-1.3-1.5-2-3-2"/></IconBase>;
+        const ShieldCheck = (props) => <IconBase {...props}><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></IconBase>;
+        const Dna = (props) => <IconBase {...props}><path d="m2 15 4.43-2.77a7.94 7.94 0 0 1 3.57-1.23h1.36c1.37 0 2.58.4 3.57 1.23l4.43 2.77"/><path d="m22 9-4.43 2.77a7.94 7.94 0 0 1-3.57 1.23H14c-1.37 0-2.58-.4-3.57-1.23L6 9"/><path d="m2 9 4.43 2.77a7.94 7.94 0 0 0 3.57 1.23h1.36c1.37 0 2.58-.4 3.57-1.23l4.43 2.77"/><path d="m22 15-4.43-2.77a7.94 7.94 0 0 0-3.57-1.23H14c-1.37 0-2.58.4-3.57 1.23L6 15"/></IconBase>;
+        const Radio = (props) => <IconBase {...props}><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"/><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"/></IconBase>;
+        const Monitor = (props) => <IconBase {...props}><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></IconBase>;
+        const Zap = (props) => <IconBase {...props}><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></IconBase>;
+        const Layers = (props) => <IconBase {...props}><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></IconBase>;
+        const Binary = (props) => <IconBase {...props}><rect x="14" y="14" width="4" height="6" rx="2"/><rect x="6" y="4" width="4" height="6" rx="2"/><path d="M6 20h4"/><path d="M14 10h4"/><path d="M6 14h2v6"/><path d="M14 4h2v6"/></IconBase>;
+        const Lightbulb = (props) => <IconBase {...props}><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-1 1.5-2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></IconBase>;
+        const FileCode = (props) => <IconBase {...props}><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></IconBase>;
+        const Server = (props) => <IconBase {...props}><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></IconBase>;
+        const Sparkles = (props) => <IconBase {...props}><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275Z"/><path d="M5 3v4"/><path d="M9 5H5"/><path d="M19 19h-4"/><path d="M17 17v4"/></IconBase>;
+        const Wifi = (props) => <IconBase {...props}><path d="M12 20h.01"/><path d="M2 8.82a15 15 0 0 1 20 0"/><path d="M5 12.859a10 10 0 0 1 14 0"/><path d="M8.5 16.429a5 5 0 0 1 7 0"/></IconBase>;
+        const Eye = (props) => <IconBase {...props}><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></IconBase>;
+
+        // --- データ定義（色を印刷向けに調整） ---
+        const VECTORS = [
+            { id: 'SUPER', label: '計算する力', color: 'text-blue-600', stroke: '#2563eb', bg: 'bg-blue-50', border: 'border-blue-200', icon: Monitor, lane: -3 },
+            { id: 'WEARABLE', label: '小さくなる', color: 'text-green-600', stroke: '#16a34a', bg: 'bg-green-50', border: 'border-green-200', icon: Smartphone, lane: -2 },
+            { id: 'AI', label: '賢くなる(AI)', color: 'text-purple-600', stroke: '#9333ea', bg: 'bg-purple-50', border: 'border-purple-200', icon: BrainCircuit, lane: -1 },
+            { id: 'ROOT', label: 'はじまり', color: 'text-slate-600', stroke: '#475569', bg: 'bg-slate-100', border: 'border-slate-300', icon: Zap, lane: 0 },
+            { id: 'GENERAL', label: 'なんでもできる', color: 'text-amber-600', stroke: '#d97706', bg: 'bg-amber-50', border: 'border-amber-200', icon: Layers, lane: 0 },
+            { id: 'VR', label: '体験する(VR)', color: 'text-pink-600', stroke: '#db2777', bg: 'bg-pink-50', border: 'border-pink-200', icon: Glasses, lane: 1 },
+            { id: 'BLOCKCHAIN', label: 'みんなで管理', color: 'text-orange-600', stroke: '#ea580c', bg: 'bg-orange-50', border: 'border-orange-200', icon: ShieldCheck, lane: 2 },
+            { id: 'BIO', label: '生き物と合体', color: 'text-red-600', stroke: '#dc2626', bg: 'bg-red-50', border: 'border-red-200', icon: Dna, lane: 3 },
+        ];
+
+        // データをそのまま使用
+        const TIMELINE_DATA = [
+            { id: 'e1', year: '1837', title: '電信 (Telegraph)', vector: 'ROOT', icon: Radio, description: 'モールス信号。0と1の組み合わせで情報を送れることに気づいた！' },
+            { id: 'e1-2', year: '1854', title: 'ブール代数', vector: 'ROOT', icon: Binary, description: '「イエス/ノー」の論理を、数学で計算できることを発見。' },
+            { id: 'e1-3', year: '1904', title: '真空管', vector: 'ROOT', icon: Lightbulb, description: '電気の流れをスイッチできるガラスの部品。大きくて熱くなる。' },
+            { id: 'e1-4', year: '1936', title: 'チューリングマシン', vector: 'ROOT', icon: FileCode, description: 'コンピュータの理論上の設計図。' },
+            { id: 'e1-5', year: '1946', title: 'ENIAC (エニアック)', vector: 'SUPER', icon: Server, description: '最初の巨大コンピュータ。30トンもあった！' },
+            { id: 'e2', year: '1947', title: 'トランジスタ', vector: 'ROOT', icon: Cpu, description: '小さくて壊れない「石のスイッチ」。ここから小型化が始まる。' },
+            { id: 'e3', year: '1964', title: 'CDC 6600', vector: 'SUPER', description: 'スーパーコンピュータの元祖。とにかく速さを求めた。' },
+            { id: 'e3-5', year: '1968', title: '最初のVR', vector: 'VR', icon: Glasses, description: '天井から吊るす巨大な装置で、立体映像を見た。' },
+            { id: 'e4', year: '1969', title: 'ARPANET', vector: 'ROOT', description: 'コンピュータ同士をつなぐ実験。インターネットの先祖。' },
+            { id: 'e5', year: '1980s', title: 'パソコンの普及', vector: 'GENERAL', description: '机の上で使えるようになった！ここから全てが広がる。' },
+            { id: 'e6', year: '1991', title: 'ユビキタス', vector: 'WEARABLE', description: '「空気のように」どこにでもあるコンピュータを目指す考え。' },
+            { id: 'e6-5', year: '2007', title: 'iPhone', vector: 'WEARABLE', icon: Smartphone, description: '高性能なPCをポケットに入れて持ち歩く時代の始まり。' },
+            { id: 'e7', year: '2008', title: 'ビットコイン', vector: 'BLOCKCHAIN', description: '管理者がいなくても、みんなで正しい記録を守る仕組み。' },
+            { id: 'e8', year: '2012', title: 'ディープラーニング', vector: 'AI', description: 'AIが「猫」を自分で認識できるようになった革命的な出来事。' },
+            { id: 'e9', year: '2020', title: 'AI搭載PC', vector: 'GENERAL', description: 'PCの中にAI専用のチップが入るのが当たり前に。' },
+            { id: 'e10', year: '2021', title: '富岳 (Fugaku)', vector: 'SUPER', description: '日本のスパコン。とてつもない計算速度で薬などを開発。' },
+            { id: 'e10-5', year: '2022', title: '生成AI (ChatGPT)', vector: 'AI', icon: Sparkles, description: 'AIが文章や絵を「自分で作る」ことができるようになった。' },
+            { id: 'e10-8', year: '2024', title: 'AIエージェント', vector: 'AI', icon: Eye, description: 'AIが見たり聞いたりして、自分で判断して動くように。' },
+            { id: 'e11', year: 'Future', title: '空間コンピュータ', vector: 'VR', description: '画面の中ではなく、部屋全体をコンピュータとして使う。' },
+            { id: 'e11-5', year: 'Future', title: '1兆個のセンサー', vector: 'WEARABLE', icon: Wifi, description: '街や服、あらゆるモノがネットにつながる未来。' },
+            { id: 'e12', year: 'Future', title: '脳と接続', vector: 'VR', description: 'キーボードを使わず、考えただけで操作する技術。' },
+            { id: 'e13', year: 'Future', title: 'DNAストレージ', vector: 'BIO', description: '生き物のDNAにデータを保存する。究極の自然回帰。' },
+        ];
+
+        const ITEM_HEIGHT = 160;
+        const TOP_PADDING = 150;
+        const LANE_WIDTH_PERCENT = 11;
+        const SVG_WIDTH = 1200;
+
+        const EvolutionTreeStatic = () => {
+            
+            // 座標計算（前回と同様だが、シンプル化）
+            const positionedEvents = React.useMemo(() => {
+                return TIMELINE_DATA.map((event, index) => {
+                const vectorDef = VECTORS.find(v => v.id === event.vector);
+                return {
+                    ...event,
+                    y: TOP_PADDING + index * ITEM_HEIGHT,
+                    lane: vectorDef.lane,
+                    vectorDef
+                };
+                });
+            }, []);
+            
+            const totalHeight = positionedEvents[positionedEvents.length - 1].y + 300;
+
+            // パス生成ロジック（そのまま流用し、色だけCSSクラスではなくHexコードで指定）
+            const paths = React.useMemo(() => {
+                const centerLaneX = SVG_WIDTH * 0.5;
+                const convergenceEvent = positionedEvents.find(e => e.title.includes('AI搭載PC')); 
+                const convergenceY = convergenceEvent ? convergenceEvent.y : 0;
+                const transistorEvent = positionedEvents.find(e => e.year === '1947');
+                const transistorY = transistorEvent ? transistorEvent.y : 0;
+                const forkIndex = positionedEvents.findIndex(e => e.year === '1964'); 
+                const defaultForkY = forkIndex > 0 ? positionedEvents[forkIndex].y - 50 : positionedEvents[6].y; 
+
+                return VECTORS.filter(v => v.id !== 'ROOT' && v.id !== 'GENERAL').map(vec => {
+                    const vecEvents = positionedEvents.filter(e => e.vector === vec.id);
+                    if (vecEvents.length === 0) return null;
+                    const laneX = (50 + (vec.lane * LANE_WIDTH_PERCENT)) / 100 * SVG_WIDTH;
+                    
+                    const generatePathD = () => {
+                        let d = "";
+                        const cx = centerLaneX; const lx = laneX;
+
+                        if (vec.id === 'SUPER') {
+                            const eniac = vecEvents.find(e => e.title.includes('ENIAC'));
+                            if (eniac) {
+                                const vacuumStart = positionedEvents.find(e => e.year === '1904');
+                                const startY = vacuumStart ? vacuumStart.y - 20 : positionedEvents[0].y;
+                                d += `M ${cx} ${startY} C ${cx} ${startY + 50}, ${lx} ${eniac.y - 50}, ${lx} ${eniac.y} `;
+                            }
+                            const cdc = vecEvents.find(e => e.title.includes('CDC 6600'));
+                            if (cdc) {
+                                const startY = transistorY + 50; 
+                                d += `M ${cx} ${startY} C ${cx} ${startY + 50}, ${lx} ${cdc.y - 50}, ${lx} ${cdc.y} `;
+                                const mainEvents = vecEvents.filter(e => e.y >= cdc.y && e.y < convergenceY);
+                                mainEvents.forEach(e => { if (e !== cdc) d += `L ${lx} ${e.y} `; });
+                                const lastEvent = mainEvents[mainEvents.length - 1];
+                                if (lastEvent && convergenceEvent) d += `C ${lx} ${lastEvent.y + 80}, ${cx} ${convergenceY - 80}, ${cx} ${convergenceY} `;
+                            }
+                        } else {
+                            const firstEvent = vecEvents[0];
+                            const isOldOrigin = firstEvent.y < defaultForkY;
+                            const startY = isOldOrigin ? firstEvent.y - 100 : positionedEvents[0].y - 100;
+                            d = `M ${cx} ${startY} `; 
+                            const earlyEvents = vecEvents.filter(e => e.y < defaultForkY);
+                            if (earlyEvents.length > 0) {
+                                d += `C ${cx} ${earlyEvents[0].y - 50}, ${lx} ${earlyEvents[0].y - 50}, ${lx} ${earlyEvents[0].y} `;
+                                earlyEvents.forEach(e => d += `L ${lx} ${e.y} `);
+                                d += `L ${lx} ${defaultForkY} `;
+                            } else {
+                                d += `L ${cx} ${defaultForkY} C ${cx} ${defaultForkY + 100}, ${lx} ${defaultForkY + 50}, ${lx} ${vecEvents.filter(e => e.y >= defaultForkY)[0]?.y || defaultForkY + 100} `;
+                            }
+                            const mainEvents = vecEvents.filter(e => e.y >= defaultForkY && e.y < convergenceY);
+                            mainEvents.forEach(e => d += `L ${lx} ${e.y} `);
+                            if (convergenceEvent && (mainEvents.length > 0 || earlyEvents.length > 0)) {
+                                const lastEvent = mainEvents.length > 0 ? mainEvents[mainEvents.length-1] : earlyEvents[earlyEvents.length-1];
+                                if (lastEvent && lastEvent.y < convergenceY) d += `C ${lx} ${lastEvent.y + 80}, ${cx} ${convergenceY - 80}, ${cx} ${convergenceY} `;
+                            }
+                        }
+                        const futureEvents = vecEvents.filter(e => e.y > convergenceY);
+                        if (convergenceEvent && futureEvents.length > 0) {
+                            d += `M ${cx} ${convergenceY} C ${cx} ${convergenceY + 80}, ${lx} ${convergenceY + 80}, ${lx} ${futureEvents[0].y} `;
+                            futureEvents.forEach(e => d += `L ${lx} ${e.y} `);
+                            d += `L ${lx} ${futureEvents[futureEvents.length-1].y + 200} `;
+                        }
+                        return d;
+                    };
+
+                    return { vectorId: vec.id, d: generatePathD(), stroke: vec.stroke };
+                }).filter(Boolean);
+            }, [positionedEvents]);
+
+            const trunkPath = React.useMemo(() => {
+                const rootPoints = positionedEvents.filter(e => e.vector === 'ROOT' || e.vector === 'GENERAL');
+                if (rootPoints.length === 0) return '';
+                const cx = SVG_WIDTH * 0.5;
+                let d = `M ${cx} ${rootPoints[0].y - 100}`;
+                rootPoints.forEach(e => { d += ` L ${cx} ${e.y}`; });
+                d += ` L ${cx} ${positionedEvents[positionedEvents.length - 1].y + 250}`;
+                return d;
+            }, [positionedEvents]);
+
+            return (
+                <div className="w-[1200px] mx-auto relative overflow-hidden pb-32">
+                    
+                    {/* タイトルエリア */}
+                    <div className="text-center pt-16 pb-8 z-20 relative">
+                        <h1 className="text-5xl font-bold text-slate-800 tracking-wider mb-2">コンピュータのしんか</h1>
+                        <p className="text-xl text-slate-600">〜計算機からAI、そして未来へ〜</p>
+                    </div>
+
+                    {/* SVG背景レイヤー */}
+                    <svg className="absolute top-0 left-0 w-full h-full pointer-events-none" viewBox={`0 0 ${SVG_WIDTH} ${totalHeight}`} preserveAspectRatio="none">
+                         {/* 幹 */}
+                        <path d={trunkPath} stroke="#94a3b8" strokeWidth="12" fill="none" opacity="0.3" strokeLinecap="round"/>
+                        <path d={trunkPath} stroke="#94a3b8" strokeWidth="4" fill="none" opacity="0.8" strokeDasharray="10 10"/>
+                        
+                        {/* 枝 */}
+                        {paths.map((p, i) => (
+                            <g key={i}>
+                                <path d={p.d} stroke={p.stroke} strokeWidth="6" fill="none" opacity="0.4" strokeLinecap="round" />
+                                <path d={p.d} stroke={p.stroke} strokeWidth="3" fill="none" opacity="1" strokeDasharray="5 5" />
+                            </g>
+                        ))}
+                    </svg>
+
+                    {/* イベントカードレイヤー */}
+                    <div className="relative z-10">
+                        {positionedEvents.map((event) => {
+                            const Icon = event.icon || event.vectorDef.icon;
+                            // 左右に交互に配置するスタイル
+                            const isLeft = event.lane < 0;
+                            const isCenter = event.lane === 0;
+                            
+                            // 配置調整
+                            let leftPos = `calc(${50 + (event.lane * LANE_WIDTH_PERCENT)}% - 20px)`; 
+                            // カードの位置調整
+                            let cardStyleClass = "";
+                            if (isCenter) {
+                                leftPos = `calc(50% - 20px)`;
+                                cardStyleClass = "translate-x-[-120%] pr-8 text-right flex-row-reverse"; // 左側に配置
+                            } else if (isLeft) {
+                                cardStyleClass = "translate-x-[-105%] pr-4 text-right flex-row-reverse";
+                            } else {
+                                cardStyleClass = "translate-x-[40px] pl-4 text-left flex-row";
+                            }
+                            
+                            // 収束点は中央配置
+                            if (event.title.includes('AI搭載PC') || event.title.includes('パソコン')) {
+                                cardStyleClass = "translate-x-[-50%] flex-col text-center items-center w-[400px] !left-1/2 ml-[20px]";
+                                leftPos = `calc(50% - 20px)`;
+                            }
+
+                            return (
+                                <div key={event.id} className="absolute flex items-center group" style={{ top: event.y - 30, left: leftPos }}>
+                                    
+                                    {/* タイムライン上のドット */}
+                                    <div className={`w-10 h-10 rounded-full border-4 bg-white flex items-center justify-center shrink-0 z-20 ${event.vectorDef.border} ${event.vectorDef.color}`}>
+                                        <Icon size={20} />
+                                    </div>
+
+                                    {/* 吹き出しカード */}
+                                    <div className={`absolute w-[320px] ${cardStyleClass} flex items-center`}>
+                                        <div className={`hand-drawn-box bg-white p-4 relative ${event.vectorDef.bg} border-2 border-slate-300 w-full`}>
+                                            <div className="flex justify-between items-center mb-1 border-b border-slate-200 pb-1">
+                                                <span className={`text-sm font-bold ${event.vectorDef.color}`}>{event.vectorDef.label}</span>
+                                                <span className="text-lg font-bold font-mono text-slate-400">{event.year}</span>
+                                            </div>
+                                            <h3 className="text-xl font-bold text-slate-800 mb-1">{event.title}</h3>
+                                            <p className="text-sm text-slate-600 leading-snug">{event.description}</p>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            );
+                        })}
+                    </div>
+                    
+                    {/* フッター */}
+                    <div className="absolute bottom-10 w-full text-center text-slate-400 text-sm">
+                        Symbiotic Evolution Illustration for Students
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<EvolutionTreeStatic />);
+    </script>
+</body>
+</html>
