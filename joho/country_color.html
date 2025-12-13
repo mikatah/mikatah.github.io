@@ -1,1 +1,673 @@
+<!doctype html>
+<html lang="ja">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>色のコントラスト体験ツール</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
+    * {
+      box-sizing: border-box;
+    }
+
+    .container {
+      flex: 1;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      max-width: 1400px;
+      width: 100%;
+    }
+
+    .header {
+      text-align: center;
+      color: white;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+    }
+
+    .header h1 {
+      margin: 0 0 8px 0;
+      font-size: 32px;
+      font-weight: 700;
+    }
+
+    .header p {
+      margin: 0;
+      font-size: 16px;
+      opacity: 0.9;
+    }
+
+    .main-content {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr 1fr;
+      gap: 24px;
+      flex: 1;
+    }
+
+    .control-panel {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .control-panel h2 {
+      margin: 0 0 12px 0;
+      font-size: 20px;
+      font-weight: 600;
+      text-align: center;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .country-selection {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .country-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+      text-align: center;
+    }
+
+    .country-buttons {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .country-btn {
+      padding: 12px 16px;
+      border: 2px solid #ddd;
+      background: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .country-btn:hover {
+      border-color: #667eea;
+      background: #f0f0ff;
+      transform: translateY(-1px);
+    }
+
+    .country-btn:active {
+      transform: translateY(0);
+    }
+
+    .slider-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .slider-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: #333;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .slider-value {
+      font-weight: 600;
+      color: #667eea;
+    }
+
+    .linear-slider {
+      width: 100%;
+      height: 32px;
+      border-radius: 16px;
+      position: relative;
+      cursor: pointer;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .red-track {
+      background: linear-gradient(to right, #000000, #ff0000);
+      border-radius: 16px;
+    }
+
+    .green-track {
+      background: linear-gradient(to right, #000000, #00ff00);
+      border-radius: 16px;
+    }
+
+    .blue-track {
+      background: linear-gradient(to right, #000000, #0000ff);
+      border-radius: 16px;
+    }
+
+    .linear-thumb {
+      position: absolute;
+      top: 50%;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border: 3px solid #333;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      cursor: grab;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .linear-thumb:active {
+      cursor: grabbing;
+    }
+
+    .preview-panel {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .preview-panel h2 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 600;
+      text-align: center;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .color-preview {
+      flex: 1;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
+      min-height: 180px;
+    }
+
+    .preview-text {
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.4;
+      word-break: break-word;
+      font-size: 48px;
+    }
+
+    .fullscreen-btn {
+      padding: 14px 28px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+
+    .fullscreen-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .fullscreen-btn:active {
+      transform: translateY(0);
+    }
+
+    .fullscreen-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .fullscreen-overlay.active {
+      display: flex;
+    }
+
+    .fullscreen-content {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px;
+    }
+
+    .fullscreen-text {
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.4;
+      word-break: break-word;
+      font-size: 120px;
+    }
+
+    .fullscreen-hint {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 18px;
+      font-weight: 500;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 0.6;
+      }
+      50% {
+        opacity: 1;
+      }
+    }
+
+    .color-code-display {
+      padding: 12px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .code-label {
+      font-size: 13px;
+      color: #555;
+      font-weight: 500;
+    }
+
+    .code-label span {
+      font-weight: 600;
+      color: #333;
+      font-family: 'Courier New', monospace;
+    }
+
+    @media (max-width: 1024px) {
+      .main-content {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="container">
+   <div class="header">
+    <h1 id="title">色のコントラスト体験ツール</h1>
+    <p id="subtitle">色で表す先進8カ国</p>
+   </div>
+   <div class="main-content">
+    <div class="control-panel">
+     <h2>背景色</h2>
+     <div class="slider-group">
+      <div class="slider-label"><span>赤 (Red)</span> <span class="slider-value" id="bg-r-value">102</span>
+      </div>
+      <div class="linear-slider red-track" id="bg-r-slider">
+       <div class="linear-thumb" id="bg-r-thumb"></div>
+      </div>
+     </div>
+     <div class="slider-group">
+      <div class="slider-label"><span>緑 (Green)</span> <span class="slider-value" id="bg-g-value">126</span>
+      </div>
+      <div class="linear-slider green-track" id="bg-g-slider">
+       <div class="linear-thumb" id="bg-g-thumb"></div>
+      </div>
+     </div>
+     <div class="slider-group">
+      <div class="slider-label"><span>青 (Blue)</span> <span class="slider-value" id="bg-b-value">234</span>
+      </div>
+      <div class="linear-slider blue-track" id="bg-b-slider">
+       <div class="linear-thumb" id="bg-b-thumb"></div>
+      </div>
+     </div>
+     <div class="color-code-display">
+      <div class="code-label">
+       RGB: <span id="bg-rgb-display">RGB(102, 126, 234)</span>
+      </div>
+      <div class="code-label">
+       HEX: <span id="bg-hex-display">#667EEA</span>
+      </div>
+     </div>
+    </div>
+    <div class="preview-panel">
+     <h2>プレビュー</h2>
+     <div class="country-selection">
+      <div class="country-label">
+       国を選ぶ
+      </div>
+      <div class="country-buttons"><button class="country-btn" data-country="Canada">Canada</button> <button class="country-btn" data-country="France">France</button> <button class="country-btn" data-country="Germany">Germany</button> <button class="country-btn" data-country="Italy">Italy</button>
+      </div>
+     </div>
+     <div class="color-preview" id="color-preview">
+      <div class="preview-text" id="preview-text">
+       United States
+      </div>
+     </div>
+     <div class="country-selection">
+      <div class="country-buttons"><button class="country-btn" data-country="Japan">Japan</button> <button class="country-btn" data-country="United Kingdom">United Kingdom</button> <button class="country-btn" data-country="United States">United States</button> <button class="country-btn" data-country="European Union">European Union</button>
+      </div>
+     </div><button class="fullscreen-btn" id="fullscreen-btn">🎨 フルスクリーン表示</button>
+    </div>
+    <div class="control-panel">
+     <h2>文字色</h2>
+     <div class="slider-group">
+      <div class="slider-label"><span>赤 (Red)</span> <span class="slider-value" id="text-r-value">26</span>
+      </div>
+      <div class="linear-slider red-track" id="text-r-slider">
+       <div class="linear-thumb" id="text-r-thumb"></div>
+      </div>
+     </div>
+     <div class="slider-group">
+      <div class="slider-label"><span>緑 (Green)</span> <span class="slider-value" id="text-g-value">26</span>
+      </div>
+      <div class="linear-slider green-track" id="text-g-slider">
+       <div class="linear-thumb" id="text-g-thumb"></div>
+      </div>
+     </div>
+     <div class="slider-group">
+      <div class="slider-label"><span>青 (Blue)</span> <span class="slider-value" id="text-b-value">26</span>
+      </div>
+      <div class="linear-slider blue-track" id="text-b-slider">
+       <div class="linear-thumb" id="text-b-thumb"></div>
+      </div>
+     </div>
+     <div class="color-code-display">
+      <div class="code-label">
+       RGB: <span id="text-rgb-display">RGB(26, 26, 26)</span>
+      </div>
+      <div class="code-label">
+       HEX: <span id="text-hex-display">#1A1A1A</span>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div class="fullscreen-overlay" id="fullscreen-overlay">
+   <div class="fullscreen-content" id="fullscreen-content">
+    <div class="fullscreen-text" id="fullscreen-text">
+     United States
+    </div>
+   </div>
+   <div class="fullscreen-hint">
+    クリックして閉じる
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      title_text: "色のコントラスト体験ツール",
+      subtitle_text: "色で表す先進8カ国",
+      preview_text: "United States",
+      background_color: "#667eea",
+      text_color: "#1a1a1a",
+      font_family: "Hiragino Sans",
+      font_size: 16
+    };
+
+    let config = { ...defaultConfig };
+
+    const bgColor = { r: 102, g: 126, b: 234 };
+    const textColor = { r: 26, g: 26, b: 26 };
+
+    function rgbToHex(r, g, b) {
+      return '#' + [r, g, b].map(x => Math.round(x).toString(16).padStart(2, '0')).join('').toUpperCase();
+    }
+
+    function updatePreview() {
+      const bgHex = rgbToHex(bgColor.r, bgColor.g, bgColor.b);
+      const textHex = rgbToHex(textColor.r, textColor.g, textColor.b);
+
+      const preview = document.getElementById('color-preview');
+      const previewText = document.getElementById('preview-text');
+      
+      preview.style.backgroundColor = bgHex;
+      previewText.style.color = textHex;
+
+      document.getElementById('bg-rgb-display').textContent = 
+        `RGB(${Math.round(bgColor.r)}, ${Math.round(bgColor.g)}, ${Math.round(bgColor.b)})`;
+      document.getElementById('bg-hex-display').textContent = bgHex;
+
+      document.getElementById('text-rgb-display').textContent = 
+        `RGB(${Math.round(textColor.r)}, ${Math.round(textColor.g)}, ${Math.round(textColor.b)})`;
+      document.getElementById('text-hex-display').textContent = textHex;
+    }
+
+    function setupLinearSlider(sliderId, thumbId, valueId, colorObj, property) {
+      const slider = document.getElementById(sliderId);
+      const thumb = document.getElementById(thumbId);
+      const valueDisplay = document.getElementById(valueId);
+      
+      let isDragging = false;
+
+      function updateThumbPosition() {
+        const percentage = (colorObj[property] / 255) * 100;
+        thumb.style.left = percentage + '%';
+        valueDisplay.textContent = Math.round(colorObj[property]);
+      }
+
+      function handleMove(clientX) {
+        const rect = slider.getBoundingClientRect();
+        let percentage = ((clientX - rect.left) / rect.width) * 100;
+        percentage = Math.max(0, Math.min(100, percentage));
+        
+        colorObj[property] = (percentage / 100) * 255;
+        updateThumbPosition();
+        updatePreview();
+      }
+
+      slider.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        handleMove(e.clientX);
+      });
+
+      thumb.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        e.stopPropagation();
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (isDragging) {
+          handleMove(e.clientX);
+        }
+      });
+
+      document.addEventListener('mouseup', () => {
+        isDragging = false;
+      });
+
+      slider.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        const touch = e.touches[0];
+        handleMove(touch.clientX);
+        e.preventDefault();
+      });
+
+      document.addEventListener('touchmove', (e) => {
+        if (isDragging) {
+          const touch = e.touches[0];
+          handleMove(touch.clientX);
+          e.preventDefault();
+        }
+      }, { passive: false });
+
+      document.addEventListener('touchend', () => {
+        isDragging = false;
+      });
+
+      updateThumbPosition();
+    }
+
+    document.querySelectorAll('.country-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const country = btn.getAttribute('data-country');
+        document.getElementById('preview-text').textContent = country;
+        document.getElementById('fullscreen-text').textContent = country;
+      });
+    });
+
+    const fullscreenBtn = document.getElementById('fullscreen-btn');
+    const fullscreenOverlay = document.getElementById('fullscreen-overlay');
+    const fullscreenContent = document.getElementById('fullscreen-content');
+    const fullscreenText = document.getElementById('fullscreen-text');
+
+    fullscreenBtn.addEventListener('click', () => {
+      const bgHex = rgbToHex(bgColor.r, bgColor.g, bgColor.b);
+      const textHex = rgbToHex(textColor.r, textColor.g, textColor.b);
+      const currentText = document.getElementById('preview-text').textContent;
+
+      fullscreenContent.style.backgroundColor = bgHex;
+      fullscreenText.style.color = textHex;
+      fullscreenText.textContent = currentText;
+      fullscreenOverlay.classList.add('active');
+    });
+
+    fullscreenOverlay.addEventListener('click', () => {
+      fullscreenOverlay.classList.remove('active');
+    });
+
+    async function onConfigChange(newConfig) {
+      const customFont = newConfig.font_family || defaultConfig.font_family;
+      const baseFontStack = 'Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, sans-serif';
+      const baseSize = newConfig.font_size || defaultConfig.font_size;
+
+      document.body.style.fontFamily = `${customFont}, ${baseFontStack}`;
+      
+      document.getElementById('title').textContent = newConfig.title_text || defaultConfig.title_text;
+      document.getElementById('title').style.fontSize = `${baseSize * 2}px`;
+      
+      document.getElementById('subtitle').textContent = newConfig.subtitle_text || defaultConfig.subtitle_text;
+      document.getElementById('subtitle').style.fontSize = `${baseSize}px`;
+      
+      const previewTextElement = document.getElementById('preview-text');
+      if (previewTextElement.textContent === config.preview_text || previewTextElement.textContent === defaultConfig.preview_text) {
+        previewTextElement.textContent = newConfig.preview_text || defaultConfig.preview_text;
+        document.getElementById('fullscreen-text').textContent = newConfig.preview_text || defaultConfig.preview_text;
+      }
+
+      document.querySelectorAll('.control-panel h2, .preview-panel h2').forEach(el => {
+        el.style.fontSize = `${baseSize * 1.25}px`;
+      });
+
+      document.querySelectorAll('.slider-label').forEach(el => {
+        el.style.fontSize = `${baseSize * 0.875}px`;
+      });
+
+      document.querySelectorAll('.country-label').forEach(el => {
+        el.style.fontSize = `${baseSize * 0.875}px`;
+      });
+
+      document.querySelectorAll('.country-btn').forEach(el => {
+        el.style.fontSize = `${baseSize * 0.875}px`;
+      });
+
+      document.getElementById('fullscreen-btn').style.fontSize = `${baseSize}px`;
+
+      config = { ...newConfig };
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => {
+                config.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                config.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || defaultConfig.font_family,
+            set: (value) => {
+              config.font_family = value;
+              window.elementSdk.setConfig({ font_family: value });
+            }
+          },
+          fontSizeable: {
+            get: () => config.font_size || defaultConfig.font_size,
+            set: (value) => {
+              config.font_size = value;
+              window.elementSdk.setConfig({ font_size: value });
+            }
+          }
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["title_text", config.title_text || defaultConfig.title_text],
+          ["subtitle_text", config.subtitle_text || defaultConfig.subtitle_text],
+          ["preview_text", config.preview_text || defaultConfig.preview_text]
+        ])
+      });
+    }
+
+    setupLinearSlider('bg-r-slider', 'bg-r-thumb', 'bg-r-value', bgColor, 'r');
+    setupLinearSlider('bg-g-slider', 'bg-g-thumb', 'bg-g-value', bgColor, 'g');
+    setupLinearSlider('bg-b-slider', 'bg-b-thumb', 'bg-b-value', bgColor, 'b');
+
+    setupLinearSlider('text-r-slider', 'text-r-thumb', 'text-r-value', textColor, 'r');
+    setupLinearSlider('text-g-slider', 'text-g-thumb', 'text-g-value', textColor, 'g');
+    setupLinearSlider('text-b-slider', 'text-b-thumb', 'text-b-value', textColor, 'b');
+
+    updatePreview();
+
+    onConfigChange(config);
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ad3abf4620bd41f',t:'MTc2NTYxMDE0MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
