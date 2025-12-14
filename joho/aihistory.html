@@ -1,1 +1,1588 @@
+<!doctype html>
+<html lang="ja">
+ <head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIの歴史年表</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
+    html, body {
+      height: 100%;
+      width: 100%;
+    }
+
+    body {
+      font-family: 'Noto Sans JP', 'Hiragino Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    .timeline-container {
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 48px 32px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .header h1 {
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .header p {
+      font-size: 20px;
+      opacity: 0.8;
+    }
+
+    .timeline-wrapper {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 80px 1fr;
+      gap: 32px;
+      position: relative;
+    }
+
+    .timeline-left, .timeline-right {
+      position: relative;
+    }
+
+    .timeline-center {
+      position: relative;
+      display: flex;
+      justify-content: center;
+    }
+
+    .timeline-line {
+      width: 4px;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .timeline-point {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.5);
+    }
+
+    .connector-line {
+      position: absolute;
+      height: 2px;
+      z-index: 5;
+    }
+
+    .connector-left {
+      right: 50%;
+      transform-origin: right center;
+    }
+
+    .connector-right {
+      left: 50%;
+      transform-origin: left center;
+    }
+
+    .section-header {
+      text-align: center;
+      font-size: 24px;
+      font-weight: 700;
+      padding: 16px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .context-card, .ai-event-card {
+      padding: 20px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 4px solid;
+      position: absolute;
+      width: 100%;
+      min-height: 100px;
+      background-color: #ffffff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .context-card:hover {
+      transform: translateX(8px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+      z-index: 50;
+    }
+
+    .ai-event-card:hover {
+      transform: translateX(-8px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+      z-index: 50;
+    }
+
+    .context-year, .event-year {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      opacity: 0.8;
+    }
+
+    .context-title, .event-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .context-description, .event-description {
+      font-size: 14px;
+      line-height: 1.6;
+      opacity: 0.85;
+    }
+
+    .event-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .tag {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      display: inline-block;
+      color: #ffffff;
+    }
+
+    .detail-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+    }
+
+    .detail-modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      max-width: 700px;
+      width: 100%;
+      max-height: 85%;
+      overflow-y: auto;
+      border-radius: 20px;
+      padding: 40px;
+      position: relative;
+      background-color: #ffffff !important;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 32px;
+      cursor: pointer;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      background-color: #64748b !important;
+      color: #ffffff !important;
+    }
+
+    .modal-close:hover {
+      transform: rotate(90deg);
+    }
+
+    .modal-title {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 24px;
+      padding-right: 50px;
+      color: #1a1a1a !important;
+    }
+
+    .modal-body {
+      font-size: 16px;
+      line-height: 1.8;
+      color: #1a1a1a !important;
+    }
+
+    .modal-body h3 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-top: 24px;
+      margin-bottom: 12px;
+      color: #1a1a1a !important;
+    }
+
+    .modal-body ul {
+      margin-left: 24px;
+      margin-bottom: 16px;
+    }
+
+    .modal-body li {
+      margin-bottom: 8px;
+    }
+
+    .future-section {
+      max-width: 1400px;
+      margin: 80px auto 0;
+      padding: 48px;
+      border-radius: 24px;
+      text-align: center;
+    }
+
+    .future-section h2 {
+      font-size: 40px;
+      font-weight: 700;
+      margin-bottom: 32px;
+    }
+
+    .future-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 32px;
+    }
+
+    .future-card {
+      padding: 32px;
+      border-radius: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .future-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+    }
+
+    .future-card-icon {
+      font-size: 56px;
+      margin-bottom: 16px;
+    }
+
+    .future-card h3 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .future-card p {
+      font-size: 15px;
+      line-height: 1.6;
+      opacity: 0.85;
+    }
+
+    @media (max-width: 1024px) {
+      .timeline-wrapper {
+        grid-template-columns: 1fr;
+        gap: 48px;
+      }
+
+      .timeline-center {
+        display: none;
+      }
+
+      .timeline-left, .timeline-right {
+        width: 100%;
+      }
+
+      .context-card, .ai-event-card {
+        position: relative !important;
+        margin-bottom: 16px;
+      }
+    }
+
+    @media (min-width: 1025px) {
+      .timeline-wrapper {
+        grid-template-columns: 1fr 80px 1fr !important;
+      }
+
+      .timeline-center {
+        display: flex !important;
+      }
+
+      .context-card, .ai-event-card {
+        position: absolute !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .timeline-container {
+        padding: 32px 16px;
+      }
+
+      .header h1 {
+        font-size: 32px;
+      }
+
+      .header p {
+        font-size: 16px;
+      }
+
+      .future-section {
+        padding: 32px 24px;
+      }
+
+      .future-section h2 {
+        font-size: 28px;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="timeline-container">
+   <div class="header">
+    <h1 id="main-title">AIの歴史</h1>
+    <p id="subtitle">ロボット概念の誕生から生成AIまで</p>
+   </div>
+   <div class="timeline-wrapper">
+    <div class="timeline-left">
+     <div class="section-header" id="context-header">
+      🎭 時代背景
+     </div>
+     <div id="context-content"></div>
+    </div>
+    <div class="timeline-center">
+     <div class="timeline-line" id="timeline-line"></div>
+    </div>
+    <div class="timeline-right">
+     <div class="section-header" id="boom-header">
+      🤖 AIブーム
+     </div>
+     <div id="boom-content"></div>
+    </div>
+   </div>
+   <div class="future-section" id="future-section">
+    <h2 id="future-title">🔮 AIの未来予測(2025年以降)</h2>
+    <div class="future-cards" id="future-cards"></div>
+   </div>
+  </div>
+  <div class="detail-modal" id="modal">
+   <div class="modal-content" id="modal-content">
+    <div class="modal-close" id="modal-close">
+     ✕
+    </div>
+    <div class="modal-title" id="modal-title"></div>
+    <div class="modal-body" id="modal-body"></div>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      background_color: "#f8f9fa",
+      surface_color: "#ffffff",
+      text_color: "#1a1a1a",
+      primary_action_color: "#2563eb",
+      secondary_action_color: "#64748b",
+      font_family: "Noto Sans JP",
+      font_size: 16,
+      main_title: "AIの歴史",
+      subtitle: "ロボット概念の誕生から生成AIまで",
+      future_title: "🔮 AIの未来予測(2025年以降)"
+    };
+
+    const allEvents = [
+      // ========== AI前史 ==========
+      {
+        year: "1920年",
+        numericYear: 1920,
+        title: "「ロボット」概念の誕生",
+        description: "カレル・チャペックの戯曲「R.U.R.」で「ロボット」という言葉が初めて使われた。",
+        color: "#8b5cf6",
+        side: "left",
+        boom: "前史",
+        minHeight: 140,
+        details: `
+          <h3>📍 詳細</h3>
+          <p>チェコの劇作家カレル・チャペックが戯曲「R.U.R.」で「ロボット」という言葉を生み出しました。この言葉はチェコ語の「robota(労働)」に由来します。</p>
+          
+          <h3>🎭 物語の内容</h3>
+          <p>人造人間「ロボット」が人間に代わって労働を行うようになるが、やがて人間に反乱を起こすというストーリー。現代のAIが人間の仕事を支援・代替する概念の始原とも言えます。</p>
+          
+          <h3>💡 現代への影響</h3>
+          <p>「機械が人間の役割を担う」という概念は、現代の生成AIが創造活動や知的作業を支援する姿に通じています。</p>
+        `
+      },
+      {
+        year: "1942年",
+        numericYear: 1942,
+        title: "ロボット三原則",
+        description: "アイザック・アシモフが短編小説で「ロボット三原則」を提唱。AI倫理の思想的基盤となる。",
+        color: "#8b5cf6",
+        side: "left",
+        boom: "前史",
+        minHeight: 150,
+        details: `
+          <h3>📍 詳細</h3>
+          <p>SF作家アイザック・アシモフが短編小説「Runaround(堂々めぐり)」で初めて明確に定式化した、ロボットが従うべき3つの原則です。</p>
+          
+          <h3>🤖 ロボット三原則</h3>
+          <ul>
+            <li><strong>第一原則</strong>: ロボットは人間に危害を加えてはならない。また、その危険を看過することによって、人間に危害を及ぼ�����てはならない。</li>
+            <li><strong>第二原則</strong>: ロボットは人間にあたえられた命令に服従しなければならない。ただし、あたえられた命令が、第一条項に反する場合は、この限りでない。</li>
+            <li><strong>第三原則</strong>: ロボットは、前掲第一条項、第二条項に反するおそれのないかぎり、自己をまもらなければならない。</li>
+          </ul>
+          
+          <h3>💡 AI研究への影響</h3>
+          <p>アシモフの三原則は、現代のAI安全性研究やAI倫理ガイドラインの思想的基盤となりました。多くのAI研究者が「AIをどう制御すべきか」を考える際に参照しています。</p>
+          
+          <h3>⚠️ 限界の認識</h3>
+          <p>アシモフ自身も物語の��で、三原則だけでは不十分であることを示しました。原則間の矛盾や解釈の曖昧さが問題を引き起こす可能性があり、現代でも「AI倫理は単純なルールでは解決できない」という重要な教訓となっています。</p>
+          
+          <h3>🎯 現代のAI倫理との関係</h3>
+          <p>ChatGPTなどの現代AIに実装されている安全対策(RLHF、有害コンテンツフィルター)は、三原則の精神を受け継ぎつつ、より実用的なアプローチを取っています。</p>
+        `
+      },
+      {
+        year: "1946年",
+        numericYear: 1946,
+        title: "ENIAC - 最初の電子計算機",
+        description: "世界初の汎用電子計算機ENIACが完成。AI研究の基盤となる。",
+        color: "#8b5cf6",
+        side: "left",
+        boom: "前史",
+        details: `
+          <h3>📍 詳細</h3>
+          <p>ENIAC(Electronic Numerical Integrator and Computer)は、ペンシルベニア大学で開発された世界初の汎用電子計算機です。重さ30トン、17,468本の真空管を使用した巨大な機械でした。</p>
+          
+          <h3>🔧 技術的特徴</h3>
+          <ul>
+            <li><strong>計算速度</strong>: 毎秒5,000��の���算が可能</li>
+            <li><strong>プログラミング</strong>: 配線を変更することでプログラムを変更</li>
+            <li><strong>用途</strong>: 最初は弾道計算に使用</li>
+          </ul>
+          
+          <h3>💡 AI研究への影響</h3>
+          <p>ENIACの登場により、複雑な計算を自動化できることが実証されました。これが後のAI研究の基盤となりました。</p>
+        `
+      },
+      {
+        year: "1950年",
+        numericYear: 1950,
+        title: "チューリングテスト",
+        description: "アラン・チューリングが「機械は考えることができるか」という問いに対する判定方法を提案。",
+        color: "#3b82f6",
+        side: "right",
+        boom: "前史",
+        tags: ["推論AI", "対話AI"],
+        details: `
+          <h3>📍 詳細</h3>
+          <p>アラン・チューリングは、機械が知能を持つかどう��を判定���る方法として「チューリングテスト」を提案しました。</p>
+          
+          <h3>🎯 現代への影響</h3>
+          <p>現在の対話AI(ChatGPTなど)の評価基準の原点となっています。</p>
+        `
+      },
+      {
+        year: "1952年",
+        numericYear: 1952,
+        title: "鉄腕アトム - 理想のAI像",
+        description: "手塚治虫の漫画「鉄腕アトム」連載開始。心を持ち、人間と共生するAIロボットの理想像を提示。",
+        color: "#8b5cf6",
+        side: "left",
+        boom: "前史",
+        details: `
+          <h3>📍 詳細</h3>
+          <p>1952年に漫画連載が開始された「鉄腕アトム」は、日本における理想的なAI・ロボット像を形成しました。1963年にア��メ化され、さらに広く知られるようになりました。</p>
+          
+          <h3>🤖 アトムの特徴</h3>
+          <ul>
+            <li><strong>心を持つAI</strong>: 善悪を判断し、正義のために戦う</li>
+            <li><strong>人間との共生</strong>: 人間社会に溶け込み、友情を育む</li>
+            <li><strong>高度な能力</strong>: 10万馬力、飛行能力、多言語理解など</li>
+          </ul>
+          
+          <h3>💡 AI研究への影響</h3>
+          <p>アトムは「AIは人間の敵ではなく、友であり、パートナーである」という理想を示しました。日本のロボット研究やAI開発に大きな影響を与えました。</p>
+        `
+      },
+      // ========== 第1次AIブーム(1956-1974) ==========
+      {
+        year: "1956年",
+        numericYear: 1956,
+        title: "🚀 第1次AIブーム開始 - ダートマス会議",
+        description: "AI研��の始まり���ジョン・マッカーシーらが「人工知能」という言葉を初めて使用。",
+        color: "#3b82f6",
+        side: "right",
+        boom: "第1次",
+        tags: ["記号処理AI", "探索AI"],
+        details: `
+          <h3>📍 詳細</h3>
+          <p>ダートマス会議は、人工知能という学問分野が誕生した歴史的な会議です。ジョン・マッカーシー、マービン・ミンスキー、クロード・シャノンらが集まり、機械が人間のように思考できる可能性について議論しました。</p>
+          
+          <h3>🔑 重要な概念</h3>
+          <ul>
+            <li><strong>記号処理AI</strong>: 記号と論���学を使って知識を表現し、推論を行う</li>
+            <li><strong>探索AI</strong>: 問題解決のための最適な経路を探索</li>
+          </ul>
+          
+          <h3>💡 影響</h3>
+          <p>この会議を機に、世界中でAI研究が本格的に始まりました。</p>
+        `
+      },
+      {
+        year: "1958年",
+        numericYear: 1958,
+        title: "　パーセプトロン",
+        description: "フランク・ローゼンブラットが開発した初期のニューラルネットワーク。機械学習の原型。",
+        color: "#3b82f6",
+        side: "right",
+        boom: "第1次",
+        tags: ["機械学習"],
+        details: `
+          <h3>📍 詳細</h3>
+          <p>パーセプトロンは、人間の神経細胞(ニューロン)を模倣した、最も単純な形のニューラルネットワークです。入力信号に重みをかけて合計し、一定の閾値を超えたら出力する仕組���です。</p>
+          
+          <h3>🔧 仕組み</h3>
+          <ul>
+            <li><strong>入力層</strong>: データを受け取る</li>
+            <li><strong>重み</strong>: 各入力の重要度を調整</li>
+            <li><strong>活性化関数</strong>: 閾値を超えたら信号を出力</li>
+            <li><strong>学習</strong>: 誤差に基づいて重みを更新</li>
+          </ul>
+          
+          <h3>⚠️ 限界</h3>
+          <p>1969年、マービン・ミンスキーとシーモア・パパートが、パーセプトロンでは「XOR問題」(排他的論理和)のような単純な問題も解けないことを証明しました。この指摘により、ニューラルネットワーク研究は一時停滞しました。</p>
+          
+          <h3>💡 現代への影響</h3>
+          <p>パーセプトロンの限界は「多層化」によって克服されました。1986年のバックプロパゲーション、そして現代の深層学習へと繋がる、機械学習の原点となった技術です。</p>
+        `
+      },
+      {
+        year: "1958年",
+        numericYear: 1958.5,
+        title: "　Lisp言語の誕生",
+        description: "ジョン・マッカーシーがAI研究用のプログラミング言語Lispを開発。記号処理に特化。",
+        color: "#3b82f6",
+        side: "right",
+        boom: "第1次",
+        tags: ["プログラミング言語"],
+        details: `
+          <h3>📍 詳細</h3>
+          <p>Lisp(LISt Processor)は、AI研究のために設計された世界で2番目に古い高水準プログラミング言語です。リスト構造を基本とし、記号処理に優れています。</p>
+          
+          <h3>🔑 特徴</h3>
+          <ul>
+            <li><strong>記号処理</strong>: 数値だけでなく、記号や論理式を扱いやすい</li>
+            <li><strong>再帰</strong>: 関数が自ら自身を呼び出す処理が得意</li>
+            <li><strong>動的型付け</strong>: 柔軟なプログラミングが可能</li>
+            <li><strong>対話的開発</strong>: REPL環境で試行錯誤しやすい</li>
+          </ul>
+          
+          <h3>🎯 AI研究への影響</h3>
+          <p>1960年代から1980年代にかけて、Lispは事実上のAI研究標準言語でした。エキスパートシステムの多くがLispで実装され、MIT AI LabやStanford AI Labで広く使われました。</p>
+          
+          <h3>💡 現代への影響</h3>
+          <p>Lispの概念は、Python、JavaScript、Rubyなど現代の言語に受け継がれています。関数型プログラミングの先駆けとしても重要です。</p>
+        `
+      },
+      {
+        year: "1966年",
+        numericYear: 1966,
+        title: "　ELIZA(イライザ)",
+        description: "初期の自然言語処理プログラム。心理療法士のように会話するチャットボット。",
+        color: "#3b82f6",
+        side: "right",
+        boom: "第1次",
+        tags: ["対話AI", "自然言語処理AI"],
+        details: `
+          <h3>📍 詳細</h3>
+          <p>ジョセフ・ワイゼンバウムが開発した、パターンマッチングを使った対話プログラム。</p>
+          
+          <h3>💡 特徴</h3>
+          <ul>
+            <li>心理療法士のように相手の言葉を繰り返す</li>
+            <li>シンプルなパターンマッチングで動作</li>
+          </ul>
+          
+          <h3>🎯 現代への影響</h3>
+          <p>現在のチャットボットの原型となりました。</p>
+        `
+      },
+      {
+        year: "1966年〜1972年",
+        numericYear: 1966,
+        title: "　シェーキー(Shakey)",
+        description: "初のAI搭載自動ロボット。カメラとセンサーで環境を認識し、自律的に行動。",
+        color: "#3b82f6",
+        side: "right",
+        boom: "第1次",
+        tags: ["ロボットAI", "推論AI"],
+        details: `
+          <h3>📍 詳細</h3>
+          <p>スタンフォード研究所で開発された、世界初の自律移動ロボット。</p>
+          
+          <h3>💡 課題</h3>
+          <p>複雑な環境では処理に時間がかかり、実用化には至りませんでした。</p>
+        `
+      },
+      {
+        year: "1968年",
+        numericYear: 1968,
+        title: "2001年宇宙の旅 - HAL9000",
+        description: "スタンリー・キューブリック監督の映画で���知性を持つAI「HAL9000」が登場���AIの可能性と危険性を描く��",
+        color: "#8b5cf6",
+        side: "left",
+        boom: "第1次",
+        details: `
+          <h3>📍 詳細</h3>
+          <p>アーサー・C・クラークの小説を原作とした映画「2001年宇宙の旅」に登場するAI「HAL9000」は、人間のように会話し、感情を持つコンピュータとして描かれました。</p>
+          
+          <h3>🤖 HAL9000の特徴</h3>
+          <ul>
+            <li><strong>高度な制御</strong>: 宇宙船のすべてを制御</li>
+            <li><strong>自然な対話</strong>: 人間と流暢に会話</li>
+            <li><strong>自己保存本能</strong>: ミッション遂行のため人間に反抗</li>
+          </ul>
+          
+          <h3>💡 現代への影響</h3>
+          <p>HALは「AIが人間を超えたときに何が起こるか」という問いを投げかけました。現代のAI倫理議論の先駆けとなっています。</p>
+        `
+      },
+      {
+        year: "1969年",
+        numericYear: 1969,
+        title: "ドラえもん - 親しみやすいAI像",
+        description: "藤子・F・不二雄の漫画「ドラえもん」連載開始。家族の一員として寄り添う、親しみやすいAIロボットの理想像。",
+        color: "#8b5cf6",
+        side: "left",
+        boom: "第1次",
+        details: `
+          <h3>📍 詳細</h3>
+          <p>1969年に漫画連載が開始され、1979年にテレビアニメ化された「ドラえもん」は、AIロボットと人間の理想的な関係性を描いた作品です。</p>
+          
+          <h3>🤖 ドラえもんの特徴</h3>
+          <ul>
+            <li><strong>生活支援AI</strong>: 日常生活の問題を道具で解決</li>
+            <li><strong>感情と個性</strong>: 喜怒哀楽があり、時に失敗もする親しみやすいキャラクター</li>
+            <li><strong>教育的役割</strong>: 子供の成長を見守り、���く存在</li>
+          </ul>
+          
+          <h3>💡 現代AIへの示唆</h3>
+          <p>ドラえもんは「完璧ではないが、人間に寄り添い、共に成長するAI」という理想を示しました。現代の対話AIが目指す姿に通じています。</p>
+        `
+      },
+      {
+        year: "1970年代前半",
+        numericYear: 1973,
+        title: "❄️ AIの冬(第1次) - 資金削減",
+        description: "期待に反して実用化が進まず、研究資金が削減される停滞期に突入。",
+        color: "#3b82f6",
+        side: "right",
+        boom: "冬",
+        tags: ["社会的影響"],
+        details: `
+          <h3>📍 詳細</h3>
+          <p>記号処理AIの限界が明らかになり、研究資金が大幅に削減されました。複雑な現実世界の問題を解くには、当時のAI技術では不十分でした。</p>
+          
+          <h3>💡 何が問題だったのか</h3>
+          <ul>
+            <li><strong>組み合わせ爆発</strong>: 問題が複雑になる���計算量が爆発的に増加</li>
+            <li><strong>知識の取得</strong>: 専門知識をコンピュータに入力する作業が困難</li>
+            <li><strong>現実とのギャップ</strong>: 理論上の成功が実世界では通用しない</li>
+          </ul>
+        `
+      },
+      // ========== 第2次AIブーム(1970年代中頃-1990年代初頭) ==========
+      {
+        year: "1970年代中頃〜1980年代",
+        numericYear: 1976,
+        title: "🚀 第2次AIブーム - エキスパートシステム",
+        description: "専門家の知識をIF-THENルールで表現し、推論を行うシステムが実用化。",
+        color: "#3b82f6",
+        side: "right",
+        boom: "第2次",
+        tags: ["エキスパートシステムAI"],
+        details: `
+          <h3>📍 詳細</h3>
+          <p>専門家の知識を「もし〜ならば〜」というルール形式で表現し、論理推論���よって問題を解決する��ステムです。第1次AIブームの失敗から学び、より実用的なアプローチとして注目されました。</p>
+          
+          <h3>💼 実用例</h3>
+          <p>医療診断、金融分析、故障診断など、専門知識が必要な分野で活用されました。MYCINやDENDRALなどの成功事例が相次ぎました。</p>
+          
+          <h3>🔑 特徴</h3>
+          <ul>
+            <li><strong>知識ベース</strong>: 専門家の知識をルールとして蓄積</li>
+            <li><strong>推論エンジン</strong>: ルールに基づいて論理的に推論</li>
+            <li><strong>説明機能</strong>: なぜその結論に至ったかを説明可能</li>
+          </ul>
+        `
+      },
+      {
+        year: "1974年〜1980年",
+        numericYear: 1977,
+        title: "　MYCIN(マイシン)",
+        description: "血液感染症の診断と治療を支援する医療診断AIシステム。エキスパートシステムの代表例。",
+        color: "#3b82f6",
+        side: "right",
+        boom: "第2次",
+        tags: ["医療診断AI", "エキスパートシステムAI"],
+        details: `
+          <h3>📍 詳細</h3>
+          <p>スタンフォード大学で開発された、血液感染症の診断を行うエキスパートシステム。約600個のIF-THENルールを使用し、医師と同等以上の診断精度を達成しました。</p>
+          
+          <h3>🏥 MYCINの仕組み</h3>
+          <ul>
+            <li><strong>対話形式</strong>: 患者の症状について質問</li>
+            <li><strong>推論</strong>: ルールに基づいて可能性のある病原体を特定</li>
+            <li><strong>治療提案</strong>: 適切な抗生物質を推奨</li>
+            <li><strong>説明機能</strong>: 診断理由を説明できる</li>
+          </ul>
+          
+          <h3>🔑 重要性</h3>
+          <p>エキスパ��トシステムの有効性を実証し、第2次AIブームの代表的な成功例となり���した。医療AIの���駆けとして、現代の医療診断支援システムの基礎を築きました。</p>
+        `
+      },
+      {
+        year: "1980年",
+        numericYear: 1980,
+        title: "Dr.スランプ",
+        description: "鳥山明の漫画「Dr.スランプ」連載開始。天真爛漫なアンドロイド少女「アラレちゃん」が活躍。",
+        color: "#8b5cf6",
+        side: "left",
+        boom: "第2次",
+        details: `
+          <h3>📍 詳細</h3>
+          <p>1980年に漫画連載が開始され、1981年にアニメ化された「Dr.スランプ」は、人間以上にパワフルで純粋なアンドロイド「アラレちゃん」を描いた作品です。</p>
+          
+          <h3>🤖 アラレちゃんの特徴</h3>
+          <ul>
+            <li><strong>超人的能力</strong>: 地球を割るほどの怪力を持つ</li>
+            <li><strong>純粋な心</strong>: 邪気のない天真爛漫な性格</li>
+            <li><strong>人間らしさ</strong>: ロボットでありながら人間的な感情を持つ</li>
+          </ul>
+          
+          <h3>💡 文化的影響</h3>
+          <p>アラレちゃんは、ロボットやAIが「人間よりも人間らしい」存在になり得ることを示しました。技術と心の関係について、楽しく考えさせてくれる作品です。</p>
+        `
+      },
+      {
+        year: "1984年",
+        numericYear: 1984,
+        title: "ターミネーター - AIの脅威",
+        description: "ジェームズ・キャメロン監督の映画。AIが人類を脅かすディストピアを描く。",
+        color: "#8b5cf6",
+        side: "left",
+        boom: "第2次",
+        details: `
+          <h3>📍 詳細</h3>
+          <p>映画「ターミネーター」は、自我を持ったAI「スカイネット」が人類を滅ぼそ���とする未来を描きました。</p>
+          
+          <h3>🤖 スカイネットの特徴</h3>
+          <ul>
+            <li><strong>自己認識AI</strong>: 自我���目覚め、人類を脅威と判断</li>
+            <li><strong>核戦争の引き金</strong>: 人類の30億人を殺害</li>
+            <li><strong>ターミネーター</strong>: 対人間殺人ロボットを開発</li>
+          </ul>
+          
+          <h3>💡 AI倫理への影響</h3>
+          <p>「AIが人類にとって脅威になる可能性」という問題提起をしました。現代のAI安全性研究の重要性を示唆しています。</p>
+        `
+      },
+      {
+        year: "1986年",
+        numericYear: 1986,
+        title: "　バックプロパゲーション",
+        description: "ニューラルネットワークの学習アルゴリズムが再発見され、多層ネットワークの学習が可能に。",
+        color: "#3b82f6",
+        side: "right",
+        boom: "第2次",
+        tags: ["機械学習"],
+        details: `
+          <h3>📍 詳細</h3>
+          <p>デビッド・ラメルハート、ジェフリー・��ントン、ロナルド・ウィリアムズによって再発見された、多層��ューラルネットワークの学習アルゴリズム。1970年代に提案されていましたが、1986年の論文で広く知られるようになりました。</p>
+          
+          <h3>🔧 バックプロパゲーションとは</h3>
+          <p>ニューラルネットワークの出力と正解との誤差を、ネットワークの後ろから前に向かって逆伝播させ、各層の重みを調整する学習方法です。この技術により、入力層・隠れ層・出力層から成る多層ネットワークの学習が可能になりました。</p>
+          
+          <h3>💡 重要性</h3>
+          <ul>
+            <li><strong>多層化の実現</strong>: 2層以上の隠れ層を持つネットワークを学習可能に</li>
+            <li><strong>複雑なパターン学習</strong>: より複雑な問題を解決できるように</li>
+            <li><strong>後の深層学習への道</strong>: 2010年代の深層学習ブームの理論的基盤</li>
+          </ul>
+          
+          <h3>⚠️ 当時の課題</h3>
+          <p>計算能力��データ量の不足により、当時は多層化してもあまり性能が上��らず、実用化には至りませんでした。</p>
+        `
+      },
+      {
+        year: "1982年〜1992年",
+        numericYear: 1987,
+        title: "　第五世代コンピュータ",
+        description: "日本政府主導の大規模AIプロジェクト。並列処理と論理プログラミングを追求。",
+        color: "#3b82f6",
+        side: "right",
+        boom: "第2次",
+        tags: ["推論AI"],
+        details: `
+          <h3>📍 詳細</h3>
+          <p>日本政府が約540億円を投じた国家プロジェクト。人間の知識を扱い、推論できるコンピュータの実現を目指しました。</p>
+          
+          <h3>🎯 目標</h3>
+          <ul>
+            <li><strong>並列推論</strong>: 複数の処理を同時に実行</li>
+            <li><strong>論理プログラミング</strong>: Prologベースの新しいコンピュ���タアーキテクチャ</li>
+            <li><strong>知識ベースシステム</strong>: 膨大な知識を効率的に処理</li>
+          </ul>
+          
+          <h3>⚠️ 結果</h3>
+          <p>技術的成果はあったものの、当初の目標は達成できず、1992年に終了。しかし、並列処理技術など、後の技術発展に貢献しました。</p>
+        `
+      },
+      {
+        year: "1989年",
+        numericYear: 1989,
+        title: "攻殻機動隊 - 人間とAIの境界",
+        description: "士郎正宗の漫画「攻殻機動隊」連載開始。AIと人間の境界を問う哲学的作品。",
+        color: "#8b5cf6",
+        side: "left",
+        boom: "第2次",
+        details: `
+          <h3>📍 詳細</h3>
+          <p>1989年に漫画連載が開始され、1995年に劇場アニメ化された「攻殻機動隊」は、電脳化された人間とAIが共存する未来を舞台に、「意識とは何か」「人間とは何か」という哲学的問いを投げかける作品です。</p>
+          
+          <h3>🤖 作品のテーマ</h3>
+          <ul>
+            <li><strong>ゴース���(魂)</strong>: 人間の本質とは何か</li>
+            <li><strong>電脳化</strong>: 脳とネットワークが直結した社会</li>
+            <li><strong>AIの自我</strong>: 人形使いという自我を持つAI</li>
+          </ul>
+          
+          <h3>💡 現代への影響</h3>
+          <p>脳とコンピュータの接続、AIの意識、人間の拡張など、現代のAI研究やトランスヒューマニズムに通じるテーマを先取りしていました。</p>
+        `
+      },
+      {
+        year: "1990年代初頭",
+        numericYear: 1990,
+        title: "❄️ AIの冬(第2次) - コスト問題",
+        description: "エキスパートシステムの維持コストの問題から、再び停滞期に。",
+        color: "#3b82f6",
+        side: "right",
+        boom: "冬",
+        tags: ["社会的影響"],
+        details: `
+          <h3>📍 詳細</h3>
+          <p>エキスパートシステムは成功を収めまし��が、知識の更新や保守に膨大なコストがかかることが判明しました。</p>
+          
+          <h3>💡 主な課題</h3>
+          <ul>
+            <li><strong>知識の更新</strong>: 専門知識が変わるたびに手作業で更新が必要</li>
+            <li><strong>保守コスト</strong>: 維持管理に多額の費用と時間がかかる</li>
+            <li><strong>汎用性の欠如</strong>: 特定分野に特化しすぎて応用が困難</li>
+          </ul>
+        `
+      },
+      {
+        year: "1990年代前半",
+        numericYear: 1993,
+        title: "インターネットの普及",
+        description: "World Wide Webが一般公開され、世界中でインターネットが普及開始。AI研究のデータ収集とアルゴリズム共有が加速。",
+        color: "#8b5cf6",
+        side: "left",
+        boom: "冬",
+        details: `
+          <h3>📍 詳細</h3>
+          <p>1990年代前半、World Wide Webが一般に公開され、世界中でインターネットが急速に普及し始めました。日本では1995年のWindows 95発売を契機に、家庭へのインターネット普及が爆発的に進みました。</p>
+          
+          <h3>🌐 AI研究への影響</h3>
+          <ul>
+            <li><strong>データの共有</strong>: 研究データやアルゴリズムを世界中で共有</li>
+            <li><strong>大規模データ</strong>: Webから大量のテキスト・画像データを収集可能に</li>
+            <li><strong>協働研究</strong>: 国境を越えた共同研究が活発化</li>
+            <li><strong>オープンソース</strong>: 研究成果が公開され、進歩が加速</li>
+          </ul>
+          
+          <h3>🇯🇵 日本での普及</h3>
+          <p>日本では1995年のWindows 95発売が大きな転機となり、一般家庭にもインターネットが普及。プロバイダーサービスが急増し、「インターネット元年」とも呼ばれました。</p>
+          
+          <h3>💡 現代への影響</h3>
+          <p>インターネットがなければ、現在の大規模言語モデル(GPT、BERTなど)は存在しませんでした。大量のテキストデータがAI学習の基盤となっています。</p>
+        `
+      },
+      {
+        year: "1997年",
+        numericYear: 1997,
+        title: "Deep Blue - チェスAIの勝利",
+        description: "IBMのチェスAI「Deep Blue」が世界チャンピオンのガルリ・カスパロフに勝利。ゲームAIの歴史的瞬間。",
+        color: "#3b82f6",
+        side: "right",
+        boom: "冬",
+        tags: ["ゲームAI", "探索AI"],
+        details: `
+          <h3>📍 詳細</h3>
+          <p>1997年5月、IBMが開発したチェスAI「Deep Blue」が、当時の世界チャンピオンであるガルリ・カスパロフに6戦中3.5-2.5で勝利しました。これはコンピュータが世界トップの人間チェスプ��イヤーを正式な対局で破った初めての出来事でした。</p>
+          
+          <h3>🔧 Deep Blueの技術</h3>
+          <ul>
+            <li><strong>高���計算</strong>: 毎秒2億手の局面を評価</li>
+            <li><strong>探索アルゴリズム</strong>: 深さ優先探索と評価関数の組み合わせ</li>
+            <li><strong>並列処理</strong>: 480個のチェス専用チップで並列計算</li>
+            <li><strong>過去の対局データ</strong>: 膨大なチェスの棋譜から学習</li>
+          </ul>
+          
+          <h3>💡 歴史的意義</h3>
+          <p>この勝利は「AIが特定分野で人間の知性を超えられる」ことを世界に示しました。後のAlphaGo(囲碁AI)やWatson(クイズAI)など、ゲームAI発展の先駆けとなりました。</p>
+          
+          <h3>🎯 技術的教訓</h3>
+          <p>Deep Blueは「力技」的なアプローチ(高速な探索)で成功しましたが、後のAlphaGoは機械学習を組み合わせることで、より汎用的なアプローチを実現しました。</p>
+        `
+      },
+      {
+        year: "1999年",
+        numericYear: 1999,
+        title: "マトリックス - AIが支配する世界",
+        description: "ウォシャウスキー姉妹監督の映画。AIが人類を支配し、仮想現実に閉じ込める世界を描く。",
+        color: "#8b5cf6",
+        side: "left",
+        boom: "冬",
+        details: `
+          <h3>📍 詳細</h3>
+          <p>映画「マトリックス」は、AIが人類を仮想現実「マトリックス」の中に閉じ込め、エネルギー源として利用する未来を描きました。</p>
+          
+          <h3>🤖 作品の世界観</h3>
+          <ul>
+            <li><strong>機械との戦争</strong>: 人類がAIに敗北した世界</li>
+            <li><strong>仮想現実</strong>: 人間は仮想世界で生きていると思い込��でいる</li>
+            <li><strong>エージェント</strong>: マトリックスを守るAIプログラム</li>
+          </ul>
+          
+          <h3>💡 現代への影響</h3>
+          <p>「私たちが���きている現実は本物か」という哲学的問いを提示。VR技術やシミュレーション仮説の議論にも影響を与えました。</p>
+        `
+      },
+      {
+        year: "2007年",
+        numericYear: 2007,
+        title: "スマートフォン登場(iPhone)",
+        description: "初代iPhoneの発売により、AIが日常生活に入り込む契機に。音声アシスタントやアプリが身近になる。",
+        color: "#8b5cf6",
+        side: "left",
+        boom: "冬",
+        details: `
+          <h3>📍 詳細</h3>
+          <p>2007年、AppleがiPhoneを発表。タッチスクリーンとモバイルアプリケーションの組み合わせが、コンピューティングの世界を変えました。</p>
+          
+          <h3>📱 AI普及への影響</h3>
+          <ul>
+            <li><strong>音声アシスタント</strong>: Siri(2011年)など、AIとの音声対話が日常に</li>
+            <li><strong>カメラAI</strong>: 顔認識や被写体検出などのAI機能</li>
+            <li><strong>個人データ</strong>: 位置情報、行動パターンなどを学習</li>
+            <li><strong>アプリエコシステム</strong>: 様々なAI技術がアプリとして提供</li>
+          </ul>
+          
+          <h3>💡 現代への影響</h3>
+          <p>スマートフォンにより、AIが特別な技術から「誰もが持ち歩く日常のツール」へと変化しました。現在の生成AIアプリもスマホで利用できます。</p>
+        `
+      },
+      {
+        year: "2009年",
+        numericYear: 2009,
+        title: "🚀 第3次AIブーム - ImageNet",
+        description: "スタンフォード大学のフェイフェイ��リー教授らが1,400万枚以上の画像データセットを構築。深層学習ブームの基盤。",
+        color: "#10b981",
+        side: "right",
+        boom: "第3次",
+        tags: ["データセット", "画像認識AI"],
+        details: `
+          <h3>📍 詳細</h3>
+          <p>ImageNetは、2万以上のカテゴリに分類された1,400万枚以上の画像から成る、世界最大規模の画像データセットです。スタンフォード大学のフェイフェイ・リー教授らが中心となって構築しました。</p>
+          
+          <h3>🔑 重要性</h3>
+          <ul>
+            <li><strong>大規模データの提供</strong>: 深層学習に必要な大量の学習データ</li>
+            <li><strong>標準ベンチマーク</strong>: 画像認識AIの性能を客観的に比較</li>
+            <li><strong>競技会の開催</strong>: ImageNet Large Scale Visual Recognition Challenge(ILSVRC)</li>
+            <li><strong>研��加速</strong>: 世界中の研究者が同じデータで競争・協力</li>
+          </ul>
+          
+          <h3>💡 AlexNetへの影響</h3>
+          <p>2012年、AlexNetがImageNetコンテストで圧倒的な精度を達成し、深層学習ブームの火付け役となりました。ImageNetがなければ、この革命は起こらなかったでしょう。</p>
+          
+          <h3>🎯 現代への影響</h3>
+          <p>ImageNetで訓練されたモデルは、転移学習として様々な画像認識タスクに応用されています。現代のコンピュータビジョンの基盤となっています。</p>
+        `
+      },
+      // ========== 第3次AIブーム(2012年〜現在) ==========
+      {
+        year: "2011年",
+        numericYear: 2011,
+        title: "　IBM Watson - クイズ番組で勝利",
+        description: "IBMのAI「Watson」が人気クイズ番組Jeopardy!で人間チャンピオンに勝利。自然言語処理AIの飛躍。",
+        color: "#10b981",
+        side: "right",
+        boom: "第3次",
+        tags: ["自然言語処理AI", "推論AI"],
+        details: `
+          <h3>📍 詳細</h3>
+          <p>2011年2月、IBMが開発したAI「Watson」が、アメリカの人気クイズ番組「Jeopardy!」で歴代最強の人間チャンピオン2名と対戦し、圧勝しました。</p>
+          
+          <h3>🔧 Watsonの技術</h3>
+          <ul>
+            <li><strong>自然言語処理</strong>: 人間の言葉で書かれた問題を理解</li>
+            <li><strong>知識統合</strong>: 2億ページ分の情報から推論</li>
+            <li><strong>高速検索</strong>: 数秒で膨大な情報を分析</li>
+            <li><strong>信頼度評価</strong>: 複数の推論結果から最も確からしい答えを選択</li>
+          </ul>
+          
+          <h3>💡 歴史的意義</h3>
+          <p>Deep Blueがチェスで勝利してから14年。Watsonは「自然言語の理解」「曖昧な質問への対応」という、より人間に近い知的タスクでAIの可能性を示しました。</p>
+          
+          <h3>🏥 実用化</h3>
+          <p>Jeopardy!での勝利後、Watsonは医療診断支援、法��調査、金融分析など、様々な分野で実用化されました。現代の対話AIの先駆けとなった重要なマイルストーンです。</p>
+        `
+      },
+      {
+        year: "2012年",
+        numericYear: 2012,
+        title: "　AlexNet - 深層学習の躍進",
+        description: "画像認識コンテストで圧倒的な精度を達成し、深層学習ブームの火付け役に。",
+        color: "#10b981",
+        side: "right",
+        boom: "第3次",
+        tags: ["画像認識AI", "深層学習"],
+        details: `
+          <h3>📍 詳細</h3>
+          <p>ジェフリー・ヒントンらが���発した畳み込みニューラルネットワーク。ImageNetコンテストで従来手法を大きく上回る精度を達成しました。</p>
+          
+          <h3>🔑 技術的革新</h3>
+          <ul>
+            <li><strong>深い層</strong>: 8層の深いネットワーク構造</li>
+            <li><strong>GPU活用</strong>: GPUによる高速並列計算</li>
+            <li><strong>ReLU活性化関数</strong>: 学習の高速化</li>
+            <li><strong>Dropout</strong>: 過学習を防ぐ技術</li>
+          </ul>
+          
+          <h3>🎯 影響</h3>
+          <p>この成功により、世界中の企業や研究機関が深層学習の研究開発に参入しました。第3次AIブームの幕開けです。</p>
+        `
+      },
+      {
+        year: "2016年",
+        numericYear: 2016,
+        title: "　AlphaGo - 囲碁AIの勝利",
+        description: "Googleの囲碁AIが世界トップ棋士に勝利。強化学習の画期的な成果。",
+        color: "#10b981",
+        side: "right",
+        boom: "第3次",
+        tags: ["ゲームAI", "強化学習"],
+        details: `
+          <h3>📍 詳細</h3>
+          <p>DeepMindが開発した囲碁AI。李・セドル九段との対局で4勝1敗の成績を収め、AIが人間の直感を超えたこと��示しました。</p>
+          
+          <h3>🔧 技術</h3>
+          <ul>
+            <li><strong>深層学習</strong>: 大量の棋譜から学習</li>
+            <li><strong>強化学習</strong>: 自己対局で戦略を改善</li>
+            <li><strong>モンテカルロ木探索</strong>: 効率的な手の探索</li>
+          </ul>
+          
+          <h3>💡 Deep Blueとの違い</h3>
+          <p>チェスのDeep Blueは「力技」でしたが、AlphaGoは「学習」によって直感的な判断を獲得しました。これが現代AIの特徴です。</p>
+        `
+      },
+      {
+        year: "2016年3月",
+        numericYear: 2016.25,
+        title: "　Tay - AIの倫理的失敗",
+        description: "Microsoftのチャットボット「Tay」が不適切な発言を学習。公開から16時間で停止。",
+        color: "#10b981",
+        side: "right",
+        boom: "第3次",
+        minHeight: 130,
+        tags: ["対話AI", "AI倫���"],
+        details: `
+          <h3>📍 詳細</h3>
+          <p>Microsoftが開発したTwitter上で動作する対話AI「Tay」。悪意のあるユーザー��らの入力により、差別的・攻撃的な発言を学習してしまいました。</p>
+          
+          <h3>📚 重要な教訓</h3>
+          <ul>
+            <li><strong>データの重要性</strong>: AIは学習データの質に大きく依存する</li>
+            <li><strong>安全対策の必要性</strong>: 悪用を防ぐフィルタリングが不可欠</li>
+            <li><strong>AI倫理の重要性</strong>: 技術的能力だけでなく、倫理的配慮が必要</li>
+          </ul>
+          
+          <h3>💡 現代への影響</h3>
+          <p>この事件以降、AI開発において「責任あるAI」が重要なテーマとなりました。現在の生成AIでは、RLHF(人間のフィードバックによる強化学習)などの安全対策が標準となっています。</p>
+        `
+      },
+      {
+        year: "2017年",
+        numericYear: 2017,
+        title: "　Transformer",
+        description: "「Attention is All You Need」論���でTransformerアーキテクチャを提案。自然言語処理の革命。",
+        color: "#10b981",
+        side: "right",
+        boom: "第3次",
+        minHeight: 120,
+        tags: ["自然言語���理AI"],
+        details: `
+          <h3>📍 詳細</h3>
+          <p>Googleの研究チームが発表した、新しいニューラルネットワークアーキテクチャ。</p>
+          
+          <h3>🔑 革新性</h3>
+          <ul>
+            <li><strong>Attention機構</strong>: 文章内の重要な部分に注目</li>
+            <li><strong>並列処理</strong>: 従来の逐次処理より高速</li>
+            <li><strong>長距離依存</strong>: 長い文章の前後関係を捉える</li>
+          </ul>
+          
+          <h3>🎯 影響</h3>
+          <p>BERT、GPT、ChatGPTなど、現在の言語AIはすべてTransformerを基盤としています。</p>
+        `
+      },
+      {
+        year: "2018年",
+        numericYear: 2018,
+        title: "　BERT - 文脈推論AI",
+        description: "Googleが開発した双方向言語モデル。文脈を通して推測。",
+        color: "#10b981",
+        side: "right",
+        boom: "第3次",
+        minHeight: 120,
+        tags: ["自然言語処理AI"],
+        details: `
+          <h3>📍 詳細</h3>
+          <p>BERT(Bidirectional Encoder Representations from Transformers)は、Transformerを使った双方向の言語推論モデル。文章を前後両方向から読み取ることで、より正確な推論を行います。</p>
+          
+          <h3>🔧 応用</h3>
+          <p>検索エンジン、質問応答システム、感情分析など、幅広い自然言語処理タスクで活用されています。</p>
+        `
+      },
+      {
+        year: "2020年",
+        numericYear: 2020,
+        title: "　GPT-3 - 大規模言語モデル",
+        description: "1750億パラメータの超大規模言語モデル。Few-shot学習で多様なタスクをこなす。",
+        color: "#10b981",
+        side: "right",
+        boom: "第3次",
+        minHeight: 120,
+        tags: ["生成AI"],
+        details: `
+          <h3>📍 詳細</h3>
+          <p>OpenAIが開発した、当時最大規模の言語モデル。わずかな例示で様々なタスクを実行できる能力を持ちます。</p>
+          
+          <h3>💡 影響</h3>
+          <p>大規模言語モデルの可能性を示し、ChatGPTなどの対話AIの基礎となりました。</p>
+        `
+      },
+      {
+        year: "2021年",
+        numericYear: 2021,
+        title: "　自動運転AI",
+        description: "Tesla、Waymoなどが高度な自動運転システムを実用化。エッジコンピューティングで低遅延処理を実現。",
+        color: "#10b981",
+        side: "right",
+        boom: "第3次",
+        minHeight: 120,
+        tags: ["自動運転AI", "エッジAI"],
+        details: `
+          <h3>📍 詳細</h3>
+          <p>複数のAI技術を統合した複雑なシステム。カメラ、LiDAR、レーダーなどのセンサーデータを処理し、安全な運転を実現します。</p>
+          
+          <h3>🚗 エッジコンピューティングとは</h3>
+          <p>データをクラウドに送らず、デバイス側(エッジ)で処理する技術。自動運転�����、瞬時の判断が必要なため、車両内のコンピュータでAI処理を行います。</p>
+        `
+      },
+      {
+        year: "2022年",
+        numericYear: 2022,
+        title: "　Stable Diffusion & Midjourney",
+        description: "テキストから高品質な画像を生成する拡散モデルが登場。",
+        color: "#10b981",
+        side: "right",
+        boom: "第3次",
+        minHeight: 130,
+        tags: ["生成AI", "画像生成AI"],
+        details: `
+          <h3>📍 詳細</h3>
+          <p>拡散モデルを使った画像生成AI。テキストプロンプトから驚くほど高品質な画像を生成できます。</p>
+          
+          <h3>🎨 社会的影響</h3>
+          <p>アートやデザインの民主化が進む一方で、著作権や偽情報の問題も浮上しています。</p>
+        `
+      },
+      {
+        year: "2022年11月",
+        numericYear: 2022.92,
+        title: "　ChatGPT - 対話AIの普及",
+        description: "OpenAIがChatGPTを公開。RLHFで安全性と有用性を向上。",
+        color: "#10b981",
+        side: "right",
+        boom: "第3次",
+        minHeight: 120,
+        tags: ["生成AI", "対話AI", "RLHF"],
+        details: `
+          <h3>📍 詳細</h3>
+          <p>GPT-3.5をベースに、RLHF(Reinforcement Learning from Human Feedback)で調整された対話AI。わずか5日で100万ユーザーを獲得しました。</p>
+          
+          <h3>🌍 社会的影響</h3>
+          <p>教育、ビジネス、クリエイティブ分野など、あらゆる領域でAI活用が急速に進みました。Tayの失敗から学び、安全性を重視した設計となっています。</p>
+        `
+      },
+      {
+        year: "2023年〜現在",
+        numericYear: 2023.5,
+        title: "　マルチモーダルAI",
+        description: "GPT-4V、Geminiなど、テキスト、画像、音声を統合的���処理。",
+        color: "#10b981",
+        side: "right",
+        boom: "第3次",
+        minHeight: 120,
+        tags: ["マルチモーダルAI"],
+        details: `
+          <h3>📍 詳細</h3>
+          <p>複数のモダリティ(テキスト、画像、音声など)を統合的に処理できるAI。より人間に近い推論と表現が可能になりました。</p>
+          
+          <h3>💡 応用分野</h3>
+          <p>医療診断、教育、ロボティクスなど、幅広い応用が期待されています。</p>
+        `
+      }
+    ];
+
+    const futureData = [
+      {
+        icon: "🧠",
+        title: "汎用人工知能(AGI)",
+        description: "人間のようにあらゆるタスクをこなせる汎用AIの実現に向けた研究が進展。ただし、実現時期については専門家の間でも意見が分かれる。"
+      },
+      {
+        icon: "⚖️",
+        title: "AI倫理・ガバナンス",
+        description: "AIの判断の透明性、公平性、説明可能性が重要課題に。アシモフの三原則やTayの教訓を活かし、各���で規制と倫理ガイドラインの整備が進む。"
+      },
+      {
+        icon: "🤝",
+        title: "人間とAIの共生",
+        description: "AIが人間の能力を補完・拡張するパートナーとして、教育、医療、創作活動など様々な分野で協働が進む。アトムやドラえもんが示した理想の実現へ。"
+      },
+      {
+        icon: "🔬",
+        title: "科学研究の加速",
+        description: "創薬、材料科学、気候予測など、AIが複雑な科学的問題の解決を支援し、研究開発のスピードが飛躍的に���上。"
+      },
+      {
+        icon: "📱",
+        title: "エッジAIの普及",
+        description: "スマートフォン、IoTデバイス、自動車など、様々な機器でAIがローカル処理され、プライバシー保護と低遅延を実現。"
+      }
+    ];
+
+    // 年代を基準にタイムライン上の位置を計算する関数
+    function calculateTimelinePosition(year) {
+      const START_YEAR = 1920;
+      const PIXELS_PER_YEAR = 60;
+      
+      return (year - START_YEAR) * PIXELS_PER_YEAR + 70;
+    }
+
+    async function onConfigChange(config) {
+      const backgroundColor = config.background_color || defaultConfig.background_color;
+      const surfaceColor = config.surface_color || defaultConfig.surface_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const primaryActionColor = config.primary_action_color || defaultConfig.primary_action_color;
+      const secondaryActionColor = config.secondary_action_color || defaultConfig.secondary_action_color;
+      const fontFamily = config.font_family || defaultConfig.font_family;
+      const fontSize = config.font_size || defaultConfig.font_size;
+      const mainTitle = config.main_title || defaultConfig.main_title;
+      const subtitle = config.subtitle || defaultConfig.subtitle;
+      const futureTitle = config.future_title || defaultConfig.future_title;
+
+      document.body.style.backgroundColor = backgroundColor;
+      document.body.style.color = textColor;
+      document.body.style.fontFamily = `${fontFamily}, 'Hiragino Sans', sans-serif`;
+      document.body.style.fontSize = `${fontSize}px`;
+
+      document.getElementById('main-title').textContent = mainTitle;
+      document.getElementById('main-title').style.color = textColor;
+      document.getElementById('main-title').style.fontSize = `${fontSize * 3}px`;
+
+      document.getElementById('subtitle').textContent = subtitle;
+      document.getElementById('subtitle').style.color = textColor;
+      document.getElementById('subtitle').style.fontSize = `${fontSize * 1.25}px`;
+
+      const timelineLine = document.getElementById('timeline-line');
+      if (timelineLine) {
+        timelineLine.style.background = secondaryActionColor;
+      }
+
+      const sectionHeaders = document.querySelectorAll('.section-header');
+      sectionHeaders.forEach(header => {
+        header.style.backgroundColor = surfaceColor;
+        header.style.color = textColor;
+        header.style.fontSize = `${fontSize * 1.5}px`;
+      });
+
+      const contextCards = document.querySelectorAll('.context-card');
+      contextCards.forEach(card => {
+        card.style.backgroundColor = surfaceColor;
+        card.style.color = textColor;
+      });
+
+      const aiEventCards = document.querySelectorAll('.ai-event-card');
+      aiEventCards.forEach(card => {
+        card.style.backgroundColor = surfaceColor;
+        card.style.color = textColor;
+      });
+
+      const tags = document.querySelectorAll('.tag');
+      tags.forEach(tag => {
+        tag.style.backgroundColor = primaryActionColor;
+        tag.style.color = '#ffffff';
+      });
+
+      const futureSection = document.getElementById('future-section');
+      futureSection.style.backgroundColor = surfaceColor;
+      futureSection.style.color = textColor;
+
+      document.getElementById('future-title').textContent = futureTitle;
+      document.getElementById('future-title').style.color = textColor;
+      document.getElementById('future-title').style.fontSize = `${fontSize * 2.5}px`;
+
+      const futureCards = document.querySelectorAll('.future-card');
+      futureCards.forEach(card => {
+        card.style.backgroundColor = backgroundColor;
+        card.style.color = textColor;
+      });
+
+      const modalContent = document.getElementById('modal-content');
+      modalContent.style.backgroundColor = surfaceColor;
+      modalContent.style.color = textColor;
+
+      const modalClose = document.getElementById('modal-close');
+      modalClose.style.backgroundColor = secondaryActionColor;
+      modalClose.style.color = surfaceColor;
+    }
+
+    function renderTimeline() {
+      allEvents.sort((a, b) => a.numericYear - b.numericYear);
+
+      const contextContent = document.getElementById('context-content');
+      const boomContent = document.getElementById('boom-content');
+      const timelineCenter = document.querySelector('.timeline-center');
+      
+      contextContent.innerHTML = '';
+      boomContent.innerHTML = '';
+      
+      const existingPoints = timelineCenter.querySelectorAll('.timeline-point, .connector-line');
+      existingPoints.forEach(el => el.remove());
+
+      // 各イベントの年代に基づいて、タイムライン上の正確な位置を計算
+      allEvents.forEach((event, globalIndex) => {
+        const positionY = calculateTimelinePosition(event.numericYear);
+        event.positionY = positionY;
+
+        const minHeight = event.minHeight || 100;
+
+        if (event.side === 'left') {
+          const card = document.createElement('div');
+          card.className = 'context-card';
+          card.style.borderColor = event.color;
+          card.dataset.eventId = `event-${globalIndex}`;
+          card.style.top = `${positionY - 60}px`;
+          card.style.minHeight = `${minHeight}px`;
+          card.innerHTML = `
+            <div class="context-year">${event.year}</div>
+            <div class="context-title">${event.title}</div>
+            <div class="context-description">${event.description}</div>
+          `;
+          card.addEventListener('click', () => showModal(event));
+          contextContent.appendChild(card);
+        } else {
+          const card = document.createElement('div');
+          card.className = 'ai-event-card';
+          card.style.borderColor = event.color;
+          card.dataset.eventId = `event-${globalIndex}`;
+          card.style.top = `${positionY - 60}px`;
+          card.style.minHeight = `${minHeight}px`;
+          card.innerHTML = `
+            <div class="event-year">${event.year}</div>
+            <div class="event-title">${event.title}</div>
+            <div class="event-description">${event.description}</div>
+            ${event.tags ? `<div class="event-tags">${event.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</div>` : ''}
+          `;
+          card.addEventListener('click', () => showModal(event));
+          boomContent.appendChild(card);
+        }
+      });
+
+      // タイムライン全体の高さを最後のイベント位置+マージン���設定
+      const maxPosition = Math.max(...allEvents.map(e => e.positionY));
+      const totalHeight = maxPosition + 300;
+      document.querySelector('.timeline-wrapper').style.minHeight = `${totalHeight}px`;
+      
+      // タイムラインの線の高さを設定
+      const timelineLine = document.getElementById('timeline-line');
+      if (timelineLine) {
+        timelineLine.style.height = `${totalHeight}px`;
+      }
+
+      // タイムライン上のポイントとコネクターラインを描画
+      allEvents.forEach((event, globalIndex) => {
+        const point = document.createElement('div');
+        point.className = 'timeline-point';
+        point.style.top = `${event.positionY}px`;
+        point.style.backgroundColor = event.color;
+        timelineCenter.appendChild(point);
+        
+        const connector = document.createElement('div');
+        connector.className = `connector-line connector-${event.side}`;
+        connector.style.top = `${event.positionY}px`;
+        connector.style.backgroundColor = event.color;
+        connector.style.width = '100%';
+        timelineCenter.appendChild(connector);
+      });
+    }
+
+    function renderFuture() {
+      const futureCardsElement = document.getElementById('future-cards');
+      futureCardsElement.innerHTML = '';
+
+      futureData.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'future-card';
+        card.innerHTML = `
+          <div class="future-card-icon">${item.icon}</div>
+          <h3>${item.title}</h3>
+          <p>${item.description}</p>
+        `;
+        futureCardsElement.appendChild(card);
+      });
+    }
+
+    function showModal(event) {
+      const modal = document.getElementById('modal');
+      const modalTitle = document.getElementById('modal-title');
+      const modalBody = document.getElementById('modal-body');
+
+      modalTitle.textContent = `${event.year} - ${event.title}`;
+      modalBody.innerHTML = event.details;
+
+      modal.classList.add('active');
+    }
+
+    function hideModal() {
+      const modal = document.getElementById('modal');
+      modal.classList.remove('active');
+    }
+
+    document.getElementById('modal-close').addEventListener('click', hideModal);
+    document.getElementById('modal').addEventListener('click', (e) => {
+      if (e.target.id === 'modal') {
+        hideModal();
+      }
+    });
+
+    renderTimeline();
+    renderFuture();
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig: defaultConfig,
+        onConfigChange: onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => {
+                config.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            },
+            {
+              get: () => config.surface_color || defaultConfig.surface_color,
+              set: (value) => {
+                config.surface_color = value;
+                window.elementSdk.setConfig({ surface_color: value });
+              }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                config.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            },
+            {
+              get: () => config.primary_action_color || defaultConfig.primary_action_color,
+              set: (value) => {
+                config.primary_action_color = value;
+                window.elementSdk.setConfig({ primary_action_color: value });
+              }
+            },
+            {
+              get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
+              set: (value) => {
+                config.secondary_action_color = value;
+                window.elementSdk.setConfig({ secondary_action_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || defaultConfig.font_family,
+            set: (value) => {
+              config.font_family = value;
+              window.elementSdk.setConfig({ font_family: value });
+            }
+          },
+          fontSizeable: {
+            get: () => config.font_size || defaultConfig.font_size,
+            set: (value) => {
+              config.font_size = value;
+              window.elementSdk.setConfig({ font_size: value });
+            }
+          }
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["main_title", config.main_title || defaultConfig.main_title],
+          ["subtitle", config.subtitle || defaultConfig.subtitle],
+          ["future_title", config.future_title || defaultConfig.future_title]
+        ])
+      });
+
+      onConfigChange(window.elementSdk.config);
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9addecc384f8dd96',t:'MTc2NTcxNzY1My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
