@@ -3,511 +3,599 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>情報I 期末考査 問題解説</title>
-    
+    <title>令和8年度 1学期期末考査 解説サイト | 情報Ⅰ</title>
     <style>
-        /* 1. CSSでテキスト選択を禁止 */
+        :root {
+            --primary-color: #2b6cb0;
+            --secondary-color: #3182ce;
+            --background-color: #f7fafc;
+            --card-background: #ffffff;
+            --text-color: #2d3748;
+            --accent-color: #e53e3e;
+            --success-color: #38a169;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            /* 主要ブラウザ向けの指定 */
-            -webkit-user-select: none; /* Safari/Chrome */
-            -moz-user-select: none;    /* Firefox */
-            -ms-user-select: none;     /* IE/Edge */
-            user-select: none;         /* 標準 */
-            
-            /* 文字の見た目の設定 */
-            font-family: 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
-            padding: 20px;
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
             line-height: 1.6;
+            padding-bottom: 60px;
+
+            -webkit-user-select: none; /* Safari用 */
+    -moz-user-select: none;    /* Firefox用 */
+    -ms-user-select: none;     /* IE/Edge用 */
+    user-select: none;         /* 標準 */
         }
-        
-        /* 見出しのスタイル調整 */
-        h1 {
-            color: #333;
-            border-bottom: 3px solid #007bff;
-            padding-bottom: 5px;
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        h2 {
-            color: #007bff;
-            margin-top: 30px;
-            border-left: 5px solid #007bff;
-            padding-left: 10px;
+
+        header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
         }
-        .question {
-            margin-bottom: 15px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            background-color: #f9f9f9;
+
+        header p {
+            font-size: 1rem;
+            opacity: 0.9;
         }
-        .answer {
-            color: #dc3545; /* 赤色で強調 */
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* タブシステム */
+        .tabs {
+            display: flex;
+            justify-content: space-around;
+            background-color: #edf2f7;
+            padding: 5px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: none;
+            font-size: 1rem;
             font-weight: bold;
-            margin-top: 5px;
+            color: #4a5568;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            text-align: center;
         }
-        .explanation {
-            border-left: 3px solid #ffc107;
-            padding-left: 10px;
-            margin-top: 5px;
+
+        .tab-btn:hover {
+            background-color: rgba(255,255,255,0.5);
+        }
+
+        .tab-btn.active {
+            background-color: var(--card-background);
+            color: var(--primary-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        /* 問題カード */
+        .question-card {
+            background-color: var(--card-background);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--secondary-color);
+        }
+
+        .question-header {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .question-body {
+            margin-bottom: 15px;
+            white-space: pre-line;
+        }
+
+        .options-list {
+            list-style: none;
+            margin-left: 10px;
+            margin-bottom: 15px;
+        }
+
+        .options-list li {
+            padding: 6px 0;
+        }
+
+        /* アコーディオンボタン */
+        .explain-toggle {
+            background-color: #edf2f7;
+            color: #4a5568;
+            border: 1px solid #cbd5e0;
+            padding: 10px 20px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .explain-toggle:hover {
+            background-color: #e2e8f0;
+        }
+
+        .explain-toggle.open {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .explanation-box {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: #f7fafc;
+            border-radius: 6px;
+            margin-top: 0;
+        }
+
+        .explanation-box.show {
+            max-height: 2000px; /* 十分な高さ */
+            margin-top: 15px;
+            border: 1px solid #e2e8f0;
+            padding: 20px;
+            transition: max-height 0.5s ease-in;
+        }
+
+        .answer-badge {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .answer-badge.correct {
+            background-color: var(--success-color);
+        }
+
+        .explanation-text {
+            font-size: 0.95rem;
+            color: #4a5568;
+        }
+
+        .highlight {
+            background: linear-gradient(transparent 60%, #fff3c4 0%);
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #ebf8ff;
+            border-left: 4px solid #3182ce;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 0 4px 4px 0;
+            font-size: 0.9rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            .tabs { flex-direction: column; }
+            header h1 { font-size: 1.4rem; }
+            .question-card { padding: 15px; }
         }
     </style>
 </head>
 <body>
 
-    <h1>問題解説</h1>
-    
-    <h2>第1問：情報社会・法規・セキュリティ</h2>
-    
-    <div class="question">
-        <p><strong>問1</strong> サイバー犯罪に関する各文の正誤（○×）として、もっとも適当な組み合わせを①～⑧のうちから1つ選べ。<br>
-        ア：昔は愉快犯が多かったが、今は実際に被害をもたらすものが多い。<br>
-        イ：新しいタイプの犯罪は、法律が整備されるまでしばらく罪に問えない場合がある。<br>
-        ウ：海外に住んでいる人が海外にいながら、日本国内に攻めてくることもある。</p>
-        <p class="answer">解答： ① （ア：○、イ：○、ウ：○）</p>
-        <div class="explanation">
-            <p>解説:<br>
-            ア(○): 初期は自己顕示欲による愉快犯が主でしたが、近年は金銭目的（ランサムウェアなど）や組織的な攻撃が主流です。<br>
-            イ(○): 技術に法律が追いつかず、「罪刑法定主義」の原則により、法整備されるまで裁けない事例が存在します。<br>
-            ウ(○): サイバー攻撃に国境はありません。海外サーバーを経由して国内を攻撃する事例は多数あります。</p>
-        </div>
+<header>
+    <h1>令和8年度 第1学年 1学期期末考査 解説</h1>
+    <p>科目：情報Ⅰ（試験時間：50分 / 100点満点）</p>
+</header>
+
+<div class="container">
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab(event, 'section1')">第1問 (セキュリティ)</button>
+        <button class="tab-btn" onclick="switchTab(event, 'section2')">第2問 (情報社会)</button>
+        <button class="tab-btn" onclick="switchTab(event, 'section3')">第3問 (生命とメディア)</button>
+        <button class="tab-btn" onclick="switchTab(event, 'section4')">第4問 (計算・コード)</button>
     </div>
-    
-    <div class="question">
-        <p><strong>問2</strong> まだインターネットに関する法整備が追いついていない時代を象徴する1つの事件について述べた以下の文の空欄に当てはまる適当な語句を、①～⑨のうちから1つ選べ。（選択肢：Winny 等）<br>
-        サイバー犯罪の歴史上有名な「（　　）事件」は、著作権法違反に関わるファイル共有ソフトを開発し、著作権侵害行為を幇助したとして、開発者が逮捕、起訴された事案である。開発者の金子勇氏は最終的には無罪の判決を得たが、もしもこの事件がなければ、P2Pなどの高度な通信技術を活用した世界的なサービスの開発はもっと早く、日本企業が生み出していた可能性もあったと悔やまれている。</p>
-        <p class="answer">解答： ④ （Winny）</p>
-        <div class="explanation">
-            <p>解説: 2000年代初頭のファイル共有ソフト「Winny」とその開発者・金子勇氏に関する事件です。技術の中立性と開発者の責任が問われた象徴的な事件として有名です。</p>
+
+    <div id="section1" class="tab-content active">
+        <div class="question-card">
+            <div class="question-header">問1：パスワードの管理と正誤</div>
+            <div class="question-body">学校で使っているタブレットのパスワードについて述べた、以下の文の正誤（○×）の組み合わせとして、もっとも適当なものを選べ。
+            
+            ア 担当の先生は変更後の生徒のパスワードを知っている。または調べることができる。
+            イ パスワードを忘れないように そのまま、パスワード管理表に書いておくと良い。
+            ウ 自分の生年月日は他人に分からないので、パスワードとして望ましい。</div>
+            <button class="explain-toggle" onclick="toggleExplanation(this)">解説を表示</button>
+            <div class="explanation-box">
+                <div class="answer-badge">正解の組み合わせ：× × ×</div>
+                <div class="explanation-text">
+                    <strong>【ア：×】</strong> 近年のシステムでは、パスワードは暗号化（ハッシュ化）されて保存されるため、管理者（先生）であっても元の文字列を知ることはできません（リセットは可能です）。<br>
+                    <strong>【イ：×】</strong> パスワードを「そのまま」誰でも見られるような管理表に記述して保管するのは、盗み見の危険性があるため極めて不適切です。<br>
+                    <strong>【ウ：×】</strong> 生年月日はSNSやプロフィール、身分証などから他人に推測されやすいため、パスワードとしては最も避けるべき文字列の一つです。
+                </div>
+            </div>
         </div>
-    </div>
-    
-    <div class="question">
-        <p><strong>問3</strong> 独立行政法人情報処理推進機構が2025年1月30日に公開した「情報セキュリティ10大脅威2025」において組織向け脅威第1位、および前年度からランキングを大きく上げた初登場の脅威のもっとも適当な組み合わせを、①～⑨のうちから1つ選べ。</p>
-        <p class="answer">解答： ④ （第1位：ランサムウェアによる被害、急上昇：地政学的リスクに起因するサイバー攻撃）</p>
-        <div class="explanation">
-            <p>解説: IPA「情報セキュリティ10大脅威」の近年の傾向に基づきます。</p>
+
+        <div class="question-card">
+            <div class="question-header">問2：パスワード窃盗時の被害</div>
+            <div class="question-body">パスワードを盗まれたときに起こりうる被害に <strong>当てはまらない</strong> ものを、次の中から1つ選べ。</div>
+            <ul class="options-list">
+                <li>⓪ コンピュータウィルスを知人に送信したことにされる。</li>
+                <li>① 自分が取り組んだ授業の課題を消される。</li>
+                <li>② 自分宛のメッセージを見られる。</li>
+                <li>③ 誰かの悪意ある書き込みが自分のせいにされる。</li>
+                <li>④ 財産（預金・暗号資産など）を盗まれる。</li>
+                <li>⑤ 大量の迷惑メールが届く。</li>
+                <li>⑥ 買った覚えのない商品が届く。</li>
+                <li>⑦ 借りた覚えのないお金を返せと言われる。</li>
+                <li>⑧ 知り合いが悪用サイトに誘導される。</li>
+            </ul>
+            <button class="explain-toggle" onclick="toggleExplanation(this)">解説を表示</button>
+            <div class="explanation-box">
+                <div class="answer-badge correct">正解：⑤</div>
+                <div class="explanation-text">
+                    「大量の迷惑メールが届く」原因は、自分の<strong>メールアドレス</strong>が外部に流出したり、名簿業者に登録されたりすることによります。パスワードを盗まれて「アカウントを乗っ取られた直接の被害」としては、他の選択肢（なりすまし、データ削除、不正決済など）が該当します。
+                </div>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-header">問3：不適切なパスワード</div>
+            <div class="question-body">パスワードとして明らかに不適切なものを、次の中から1つ選べ。</div>
+            <ul class="options-list">
+                <li>⓪ ymurG&2 &nbsp;&nbsp; ① okokatakim &nbsp;&nbsp; ② tmwo2t</li>
+                <li>③ YjIudCvu8CJ`=mG- &nbsp;&nbsp; <strong>④ zxcvbnm</strong> &nbsp;&nbsp; ⑤ 19zamrcNY</li>
+                <li>⑥ Atsya42-Wtmaat4 &nbsp;&nbsp; ⑦ wi459K&lt;di9 &nbsp;&nbsp; ⑧ A5Tk1Dy</li>
+            </ul>
+            <button class="explain-toggle" onclick="toggleExplanation(this)">解説を表示</button>
+            <div class="explanation-box">
+                <div class="answer-badge correct">正解：④</div>
+                <div class="explanation-text">
+                    <strong>④の「zxcvbnm」</strong>は、キーボードの最下段の英字キーを左から右にそのまま順番に並べたものです。このようなキー配列に基づく文字列や「123456」「password」などは、攻撃者が最初に試すパターンのため、容易に破られてしまいます。
+                </div>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-header">問5：多要素認証の組み合わせ</div>
+            <div class="question-body">多要素認証で用いられる組み合わせをすべて選んだものを選べ。
+            
+            ア パスワードと秘密の質問
+            イ 暗証番号とセキュリティカード
+            ウ パスワードとSMS宛の認証コード
+            エ パスワードと指紋</div>
+            <button class="explain-toggle" onclick="toggleExplanation(this)">解説を表示</button>
+            <div class="explanation-box">
+                <div class="answer-badge correct">正解：⑥（ア以外すべて）</div>
+                <div class="explanation-text">
+                    認証の3要素には<strong>「知識（知っていること）」「所有（持っているもの）」「生体（本人に関わること）」</strong>があります。異なる要素を2つ以上組み合わせるものを「多要素認証」と呼びます。
+                    <div class="info-box">
+                        ・ア：パスワード(知識) ＋ 秘密の質問(知識) ＝ 同一要素なので多要素ではない<br>
+                        ・イ：暗証番号(知識) ＋ カード(所有) ＝ 多要素認証<br>
+                        ・ウ：パスワード(知識) ＋ SMSコード(所有：スマホ端末) ＝ 多要素認証<br>
+                        ・エ：パスワード(知識) ＋ 指紋(生体) ＝ 多要素認証
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-header">問6：最新の認証ガイドライン</div>
+            <div class="question-body">最近（令和8年度）お勧めされている個人認証の方法について述べた文の正誤（◯ ×）の組み合わせを選べ。
+            
+            ア 短めのパスワードを定期的に変更するよりも、一定数以上の長さ（文字数）を用意するなど、長さを長く（文字数を多く）した方が良い。
+            イ パスワードが漏洩した場合に備えて、携帯電話への認証コードの通知などを利用した多要素認証を利用することが不正ログイン対策として有効である。
+            ウ 複数のサイトを管理しやすくするために、パスワードは推測されにくいものを１つ決めて、使い回すのが望ましい。</div>
+            <button class="explain-toggle" onclick="toggleExplanation(this)">解説を表示</button>
+            <div class="explanation-box">
+                <div class="answer-badge">正解の組み合わせ：〇 〇 ×</div>
+                <div class="explanation-text">
+                    <strong>【ア：〇】</strong> 現在のガイドライン（総務省やNISTなど）では、パスワードの「定期変更」は意味の薄い文字列の使い回しを生むため推奨されず、それよりも<span class="highlight">「長く複雑なパスワードを設定すること」</span>が推奨されています。<br>
+                    <strong>【イ：〇】</strong> 多要素認証（MFA）の導入は、万が一パスワードが漏洩しても不正ログインを完全に防ぐための極めて有効な手段です。<br>
+                    <strong>【ウ：×】</strong> パスワードの使い回しは絶対にNGです。1つのサービスから漏洩した際、他の全てのサービスへ芋づる式に不正ログイン（パスワードリスト攻撃）されてしまいます。
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="question">
-        <p><strong>問4</strong> 問3と同じ資料で、個人向け脅威として取り上げられている以下の内容の、空欄に当てはまる語句として、もっとも適当な組み合わせを、①～⑨のうちから1つ選べ。（選択肢：クレジットカード、スマホ決済、フィッシング、ネットサーフィン 等）<br>
-        企業だけでなく、私たち個人も情報セキュリティに気をつける必要がある。例えば、現金を使わなくても買い物をできる方法として、近年広まってきた（ア）を悪用する「（ア）の不正使用」がある。また、不正利用のためにはIDやパスワードの取得が必要である。そこで「（イ）による個人情報等の詐取」が行われる。私たちはメール等に記載されたURLをむやみにクリックしてはいけない。</p>
-        <p class="answer">解答： ⑧ （ア：スマホ決済、イ：フィッシング）</p>
-        <div class="explanation">
-            <p>解説:<br>
-            ア: 現金を使わない「キャッシュレス決済」の中で、近年急増しているのはスマホ決済（QRコード決済等）です。<br>
-            イ: 偽のサイトに誘導してID/PWを盗む手口はフィッシング詐欺です。</p>
+    <div id="section2" class="tab-content">
+        <div class="question-card">
+            <div class="question-header">問2：社会基盤の変遷 (Society 5.0への道のり)</div>
+            <div class="question-body">現在の日本は人類史上4番目の枠組みの「情報社会」と言われている。それでは1番目から3番目までの枠組みはどのように名付けられているか。</div>
+            <button class="explain-toggle" onclick="toggleExplanation(this)">解説を表示</button>
+            <div class="explanation-box">
+                <div class="answer-badge">正解：1番目:狩猟社会、2番目:農耕社会、3番目:工業社会</div>
+                <div class="explanation-text">
+                    内閣府が提唱する「Society 5.0」の文脈に沿った歴史区分です。
+                    <div class="info-box">
+                        ・Society 1.0：<strong>狩猟社会</strong><br>
+                        ・Society 2.0：<strong>農耕社会</strong><br>
+                        ・Society 3.0：<strong>工業社会</strong><br>
+                        ・Society 4.0：<strong>情報社会</strong>（現在の社会）<br>
+                        ・Society 5.0：情報社会のその先、サイバーとフィジカルが融合した社会
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-header">問4：情報社会の定義</div>
+            <div class="question-body">（ ア ）を中心とした情報処理機器が広く行き渡っただけでなく、（ イ ）と表現される、あらゆるものがインターネットに接続されて、大量のデータが集まるようになった。さらにより高速な情報伝達が可能になった結果、食料やエネルギー資源同様に情報が価値を持ち、あらゆる場面で情報が活用されるとともに情報に関わる（ ウ ）対策が必要になった社会をいう。</div>
+            <button class="explain-toggle" onclick="toggleExplanation(this)">解説を表示</button>
+            <div class="explanation-box">
+                <div class="answer-badge">正解：ア:コンピュータ &nbsp; イ:IoT &nbsp; ウ:情報セキュリティ</div>
+                <div class="explanation-text">
+                    モノがインターネットに繋がることを <strong>IoT (Internet of Things: モノのインターネット)</strong> と言います。情報があらゆる価値を生み出す反面、不正アクセスやサイバー攻撃を防ぐための <strong>情報セキュリティ対策</strong> の重要性が叫ばれるのが現代の情報社会（Society 4.0）の特徴です。
+                </div>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-header">問5：デジタルデータ量の増加要因</div>
+            <div class="question-body">デジタルデータ量の増加と関係が最も <strong>薄い</strong> ものを1つ選べ。</div>
+            <ul class="options-list">
+                <li>⓪ SNSへの書き込み &nbsp;&nbsp; ① 携帯電話の所持（電源ON） &nbsp;&nbsp; <strong>② マークシートの答案作成</strong></li>
+                <li>③ 携帯電話の通話 &nbsp;&nbsp; ④ 動画サイトの視聴 &nbsp;&nbsp; ⑤ ビデオ会議</li>
+                <li>⑥ キーワード検索 &nbsp;&nbsp; ⑦ 写真のアップロード &nbsp;&nbsp; ⑧ メール送信</li>
+            </ul>
+            <button class="explain-toggle" onclick="toggleExplanation(this)">解説を表示</button>
+            <div class="explanation-box">
+                <div class="answer-badge correct">正解：②</div>
+                <div class="explanation-text">
+                    マークシートの記入自体は「紙と鉛筆」による物理的なアナログ作業であり、デジタルデータの通信量や保存量を爆発的に増やす原因とは言えません。一方、①の「携帯電話の所持」は、電源がONであるだけで基地局との位置情報データやログが絶えず通信・蓄積されるため、データ増加と密接に関係しています。
+                </div>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-header">問7：Society 5.0</div>
+            <div class="question-body">情報社会に続く新たな社会として（ ア ）が提唱されている。（ ア ）は「（ イ ）と（ ウ ）を高度に融合させたシステムにより、新たな価値を創出し、経済発展と社会的課題の解決を両立する人間中心の社会」を掲げている。</div>
+            <button class="explain-toggle" onclick="toggleExplanation(this)">解説を表示</button>
+            <div class="explanation-box">
+                <div class="answer-badge">正解：ア:Society 5.0 &nbsp; イ:サイバー空間（仮想空間） &nbsp; ウ:フィジカル空間（現実空間）</div>
+                <div class="explanation-text">
+                    <strong>Society 5.0</strong> では、フィジカル空間（現実）のセンサーから膨大なデータがサイバー空間（仮想）に集まり、それをAIが分析して現実世界にフィードバック（自動運転やロボット、最適なドローン配送など）を行うことで、課題解決を図ります。
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="question">
-        <p><strong>問5</strong> 2025年3月13日に警察庁、総務省等より公表された「令和6年度不正アクセス行為の発生状況」の資料等から分かることとして述べた問5から問7の各文の正誤（○×）について、もっとも適当な組み合わせを選べ。<br>
-        ア：ランサムウェアの攻撃を受けたのは半数以上が大企業に分類されている。<br>
-        イ：ランサムウェアの「ランサム」は和訳すると「暗号化」である。<br>
-        ウ：ランサムウェアの被害を受けた企業に確認すると、半数以上の企業でウィルス対策ソフトを導入していなかった。</p>
-        <p class="answer">解答： ⑧ （ア：×、イ：×、ウ：×）</p>
-        <div class="explanation">
-            <p>解説:<br>
-            ア(×): ランサムウェアはセキュリティの甘い中小企業も標的になります（データによっては半数以上が中小企業です）。<br>
-            イ(×): Ransom（身代金）＋Softwareの造語です。「暗号化」ではありません。<br>
-            ウ(×): 多くの被害企業は対策ソフトを導入していましたが、検知できない新型や脆弱性を突かれて侵入されています。「ソフトを入れていれば安心」ではありません。</p>
+    <div id="section3" class="tab-content">
+        <div class="question-card">
+            <div class="question-header">問3：生物と非生物の違い (オートポイエーシス)</div>
+            <div class="question-body">生物は（ ア ）でできている。１つの（ ア ）で生きているものもいれば、複数の（ ア ）で構成されている生物もいる。そして（ ア ）は（ ア ）から作られる。この「自分で自分を作る」仕組みを（ イ ）という。「自己創出」と訳することが多い。</div>
+            <button class="explain-toggle" onclick="toggleExplanation(this)">解説を表示</button>
+            <div class="explanation-box">
+                <div class="answer-badge">正解：ア:細胞 &nbsp; イ:オートポイエーシス</div>
+                <div class="explanation-text">
+                    <strong>オートポイエーシス（Autopoiesis）</strong>とは、チリの生物学者マトゥラーナとバレーラが提唱した、生物が「自分自身の構成要素を、自分自身を使って生産し続ける」という自己維持・自己創出のシステム論です。機械（コンピュータ）は部品を外から与えられないと存在を維持できませんが、生物は自律的にこれを行います。
+                </div>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-header">問5：情報の3つの分類（西垣通の基礎情報学）</div>
+            <div class="question-body">頭の痛みのように自分の体、心が感じる情報が（ ア ）である。（ ア ）を元に「痛い」という表現や「欠席します」のように自分の気持ちや考えを届ける言葉や記号等を（ イ ）という。（ イ ）を送るときに携帯電話内部では、文字がデジタル信号に変換されている。デジタル信号をそのまま見ても意味が分からない、この信号のパターンを（ ウ ）という。</div>
+            <button class="explain-toggle" onclick="toggleExplanation(this)">解説を表示</button>
+            <div class="explanation-box">
+                <div class="answer-badge">正解：ア:生命情報 &nbsp; イ:社会情報 &nbsp; ウ:機械情報</div>
+                <div class="explanation-text">
+                    基礎情報学における情報の3分類です。
+                    <div class="info-box">
+                        1. <strong>生命情報</strong>：あらゆる生物が生きるために心や体で感じる、主観的で意味に満ちた情報。<br>
+                        2. <strong>社会情報</strong>：人間同士が言葉や記号を用いてコミュニケーションを行うための共有された情報。<br>
+                        3. <strong>機械情報</strong>：コンピュータが処理する、意味を切り離した単なる「0 と 1」のデジタル記号パターン。
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-header">問12：タイポグリセミアと認識メディアの働き</div>
+            <div class="question-body">（※問題文の文字順序がわざと入れ替わっています。読めるでしょうか？）
+            つぎのじしょうのなかで、じうほょうのいみなよいうを せかいくにつたえ、うとけるために こころのなかにそわなっているしくみ（認識・解釈メディア）がはらたいているようすを正しく選んでいる組み合わせを選べ。
+            
+            ア 店長の「次に人数を確認する」という説明を受けた学生アルバイトが「忍術！？」と驚くやりとりを見て、面白いと感じた。
+            イ 感染症の疑いがあるために、学校で使っているタブレット端末を持って帰ったところ、自宅の Wi-fi に接続したら、モニタに教室の様子が映った。
+            ウ この問題（問12）の問題文の意味が分かった。</div>
+            <button class="explain-toggle" onclick="toggleExplanation(this)">解説を表示</button>
+            <div class="explanation-box">
+                <div class="answer-badge">正解の組み合わせ：ア:〇 &nbsp; イ:× &nbsp; ウ:〇</div>
+                <div class="explanation-text">
+                    この問題文のように「単語の最初と最後の文字が合っていれば、途中の文字が入れ替わっていても脳が勝手に補正して読めてしまう現象」を<strong>タイポグリセミア現象</strong>と言います。
+                    <br><br>
+                    <strong>ア（〇）とウ（〇）</strong>は、人間の脳や心（認識メディア）が、入ってきたデタラメな情報や聞き間違いの情報を、自分の文脈で解正・補正して「意味」を作り出しているため、仕組みが働いていると言えます。<br>
+                    <strong>イ（×）</strong>は単なる通信機械（伝達メディア）の物理的な働きであり、心の中の認識の仕組みとは関係ありません。
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="question">
-        <p><strong>問6</strong> （正誤問題）<br>
-        ア：フィッシングサイトへ誘導する事案の報告件数は毎年増えている。<br>
-        イ：フィッシング詐欺はSMSの投稿でも確認できることがある。<br>
-        ウ：フィッシング詐欺のメール等は A○azonや佐○急便等の大手配送事業者や大手銀行を偽装して送られてくることが多い。</p>
-        <p class="answer">解答： ① （ア：○、イ：○、ウ：○）</p>
-        <div class="explanation">
-            <p>解説: 全て正解です。SMSでのフィッシングは「スミッシング」とも呼ばれ、宅配便の不在通知や大手企業を騙る手口が横行しています。</p>
+    <div id="section4" class="tab-content">
+        <div class="question-card">
+            <div class="question-header">問7：5進数から10進数への変換</div>
+            <div class="question-body">「5進数」では5個をひと固まりにするので、例えば「421(5) 」と表すとき、一番左の数字「4」は（ ア ）個のかたまりが4つあることを表しているし、真ん中の数字「2」は（ イ ）個のかたまりが2つあることを表している。以上より「421(5) 」を10進数で表すと（ ウ ）になる。</div>
+            <button class="explain-toggle" onclick="toggleExplanation(this)">解説を表示</button>
+            <div class="explanation-box">
+                <div class="answer-badge">正解：ア:25 &nbsp; イ:5 &nbsp; ウ:111</div>
+                <div class="explanation-text">
+                    5進数の各桁の重みは、右から 1の位（$5^0$）、5の位（$5^1$）、25の位（$5^2$）となります。
+                    <div class="info-box" style="font-family: monospace;">
+                        421(5) = (4 &times; 25) + (2 &times; 5) + (1 &times; 1)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 100 + 10 + 1<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 111 (10進数)
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <div class="question">
-        <p><strong>問7</strong> （正誤問題）<br>
-        ア：不正アクセス行為の手口とで検挙された人を年齢別にみると40代がもっとも多い。<br>
-        イ：不正アクセスを受けた後は、なりすましによる情報発信の被害がもっとも多い。<br>
-        ウ：不正アクセスの被害に遭った人のパスワードのおよそ半数は、他人が容易に予想できる、設定、管理の甘いものであった。</p>
-        <p class="answer">解答： ⑧ （ア：×、イ：×、ウ：×）</p>
-        <div class="explanation">
-            <p>解説:<br>
-            ア(×): 不正アクセス禁止法違反の検挙者は一般的に20代～30代が多い傾向です（40代が最多ではありません）。<br>
-            イ(×): 不正アクセス後の被害で最も多いのは、ネットバンキング不正送金やショッピング等の金銭的被害や知人へのスパム送信です。<br>
-            ウ(×): パスワードが「123456」や誕生日など、推測容易なものであるケースは依然として多いが、３割程度、あとはPWを盗み出した犯罪も同程度含まれる。</p>
+        <div class="question-card">
+            <div class="question-header">問8：10進数からN進数への変換（グループ作り）</div>
+            <div class="question-body">10進数の1の位は、10人グループを作った時にグループに入れなかった人の数を表している。4進数の1の位も同じで、4で割った時の（ ア ）が4進数の1の位の値になる。10の位は、1の位を求めた時の割り算の（ イ ）を、さらに4で割った時の（ ウ ）である。</div>
+            <button class="explain-toggle" onclick="toggleExplanation(this)">解説を表示</button>
+            <div class="explanation-box">
+                <div class="answer-badge">正解：ア:余り &nbsp; イ:商 &nbsp; ウ:余り</div>
+                <div class="explanation-text">
+                    10進数を4進数に変換するには、元の数を「4」で繰り返し割り算し、その<strong>「余り（剰余）」</strong>を下の桁から並べていきます。割った結果である<strong>「商」</strong>を次の桁の計算に使用します。
+                </div>
+            </div>
         </div>
-    </div>
 
-    <div class="question">
-        <p><strong>問8</strong> 個人情報の漏洩について述べた、以下の文の正誤（○×）の組み合わせとして、もっとも適当なものを①～⑧のうちから1つ選べ。<br>
-        ア：InstagramやTwitter等（以下、インスタ等）を利用する場合は、知らない人が見ている可能性を考えた上で、発信するかどうか決めることが望ましい。<br>
-        イ：専門知識を持っているとインスタ等にあがっている写真1枚から自宅を特定できる。<br>
-        ウ：家族旅行の写真を旅先からインスタ等に上げる行為は「今、自宅に誰もいません」と宣言したのに等しく、空き巣狙いを計画している悪い人に喜ばれる。</p>
-        <p class="answer">解答： ① （ア：○、イ：○、ウ：○）</p>
-        <div class="explanation">
-            <p>解説: 全て正解です。写真の背景（電柱、マンホール）や瞳の映り込みから住所を特定される「モザイクアプローチ」や、リアルタイム投稿による留守の特定（空き巣リスク）は重要なリテラシーです。</p>
+        <div class="question-card">
+            <div class="question-header">問10：コマンドプロンプトの利用</div>
+            <div class="question-body">（ ア ）キーと R キーを押して表示された窓に（ イ ）と入力したら、黒い画面が表示された。ここに “（ ウ ）” や “（ ウ ）/all” を入力したら、さまざまなデータが表示された。その中に、IPv6や物理アドレスの表記に 16進数 が用いられていることを確認できた。</div>
+            <button class="explain-toggle" onclick="toggleExplanation(this)">解説を表示</button>
+            <div class="explanation-box">
+                <div class="answer-badge">正解：ア:Windows &nbsp; イ:cmd &nbsp; ウ:ipconfig</div>
+                <div class="explanation-text">
+                    Windowsにおいて「Windowsキー + R」で「ファイル名を指定して実行」を開き、<strong>cmd</strong> を実行するとコマンドプロンプト（黒い画面）が開きます。
+                    ネットワークの接続情報を確認するコマンドは <strong>ipconfig</strong> です。Macアドレス（物理アドレス）やIPv6アドレスが表示され、これらは16進数で表現されていることが確認できます。
+                </div>
+            </div>
         </div>
-    </div>
 
-    <div class="question">
-        <p><strong>問9</strong> サイバーセキュリティ対策として有効な方法を紹介する以下の文の空欄に当てはまるもっとも適当な語句の組み合わせを、①～⑧のうちから1つ選べ。（選択肢：多要素認証、画面ロック、バックアップ 等）<br>
-        インターネットの安心・安全に利用するために有効な対策には、OSやソフトウェアを最新のバージョンにしておくことのほか、パスワードを長く複雑にすることや（ア）を利用すること、スマートフォンやPCの（イ）を利用すること、大切なデータの（ウ）を行うこと等が推奨されている。</p>
-        <p class="answer">解答： ③ （ア：多要素認証、イ：画面ロック、ウ：バックアップ）</p>
-        <div class="explanation">
-            <p>解説:<br>
-            ア: ID/PWに加え、スマホ等の別要素を使うのは多要素認証。<br>
-            イ: 物理的な紛失・盗難対策の基本は画面ロック。<br>
-            ウ: ランサムウェアや故障に備える基本はバックアップ。</p>
+        <div class="question-card">
+            <div class="question-header">問11：2進数から16進数への変換（文字コード：美方）</div>
+            <div class="question-body">「美方」と表示される16進数を次の中から1つ選べ。
+            なお「美方」は2進数だと <code>01111111100011100110010110111001</code> である。</div>
+            <ul class="options-list">
+                <li>⓪ 7F8D65A9 &nbsp;&nbsp; ① 7F8D56A9 &nbsp;&nbsp; ② 7F8165A9 &nbsp;&nbsp; ③ 7F8156A9</li>
+                <li><strong>④ 7F8E65B9</strong> &nbsp;&nbsp; ⑤ 7F8E56B9 &nbsp;&nbsp; ⑥ 7F8165B9 &nbsp;&nbsp; ⑦ 7F8156B9</li>
+            </ul>
+            <button class="explain-toggle" onclick="toggleExplanation(this)">解説を表示</button>
+            <div class="explanation-box">
+                <div class="answer-badge correct">正解：④</div>
+                <div class="explanation-text">
+                    2進数から16進数への変換は、<span class="highlight">後ろ（右）から「4桁ずつ」区切って</span>変換します。
+                    <div class="info-box" style="font-family: monospace;">
+                        0111 ➔ 7<br>
+                        1111 ➔ F<br>
+                        1000 ➔ 8<br>
+                        1110 ➔ E  (10進数の14)<br>
+                        0110 ➔ 6<br>
+                        0101 ➔ 5<br>
+                        1011 ➔ B  (10進数の11)<br>
+                        1001 ➔ 9<br>
+                        これらを並べると、<strong>7F8E65B9</strong> となります。
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <div class="question">
-        <p><strong>問10</strong> 同じく、サイバーセキュリティ対策として有効な方法を紹介する以下の文の空欄に当てはまる、もっとも適当な語句の組み合わせを、①～⑧のうちから1つ選べ。（選択肢：添付ファイル、覗き見、相談 等）<br>
-        インターネットを利用する際の意識として、メール本文中に書かれたリンクや（ア）は安全か確認してからクリックすることや、外出先では情報機器の紛失や盗難、（イ）に注意したい。もしも困ったことがあったら関係機関に（ウ）しよう。</p>
-        <p class="answer">解答： ⑥ （ア：添付ファイル、イ：覗き見、ウ：相談）</p>
-        <div class="explanation">
-            <p>解説:<br>
-            ア: メール攻撃の基本はリンクか添付ファイル（マルウェア）。<br>
-            イ: 外出先での画面盗み見は「ショルダーハッキング」（覗き見）と呼ばれます。<br>
-            ウ: トラブル時は一人で抱え込まず、IPAや警察、消費生活センター等へ相談しましょう。</p>
+        <div class="question-card">
+            <div class="question-header">問12：16進数から2進数への変換（カラーコード：藤色）</div>
+            <div class="question-body">「藤色（薄紫）」が表示される2進数を次の中から1つ選べ。
+            なお「藤色（薄紫）」は16進数だと <code>798BC4</code> である。</div>
+            <ul class="options-list">
+                <li>⓪ 011110010100101101000100 &nbsp;&nbsp; ① 011110010100101111000100</li>
+                <li>② 011110011000101101000100 &nbsp;&nbsp; <strong>③ 011110011000101111000100</strong></li>
+                <li>④ 111010010100101101000100 &nbsp;&nbsp; ⑤ 111010010100101111000100</li>
+                <li>⑥ 111010011000101101000100 &nbsp;&nbsp; ⑦ 111010011000101111000100</li>
+            </ul>
+            <button class="explain-toggle" onclick="toggleExplanation(this)">解説を表示</button>
+            <div class="explanation-box">
+                <div class="answer-badge correct">正解：③</div>
+                <div class="explanation-text">
+                    16進数の「1桁」を、それぞれ<span class="highlight">「4桁の2進数」</span>に展開します。
+                    <div class="info-box" style="font-family: monospace;">
+                        7 ➔ 0111<br>
+                        9 ➔ 1001<br>
+                        8 ➔ 1000<br>
+                        B ➔ 1011 (10進数の11)<br>
+                        C ➔ 1100 (10進数の12)<br>
+                        4 ➔ 0100<br>
+                        すべて連結すると、<strong>011110011000101111000100</strong>（③）になります。
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+</div>
 
-    <div class="question">
-        <p><strong>問11</strong> SMSについて述べた以下の文の空欄に当てはまる語句として、最も適当な組み合わせを①～⑧のうちから1つ選べ。（選択肢：ショート、電話番号、電話回線 等）<br>
-        SMSは（ア）メッセージサービスの略称である。送りたい相手の（イ）が分かれば送信できる。また、他のメッセージサービスと異なり、インターネット回線ではなく、（ウ）回線を利用しているので送り先によって通信料金のかかる場合がある。</p>
-        <p class="answer">解答： ③ （ア：ショート、イ：電話番号、ウ：電話）</p>
-        <div class="explanation">
-            <p>解説: SMS（Short Message Service）は電話番号宛に、電話回線の信号用チャネルを使用して送るため、送信料がかかる場合があります。</p>
-        </div>
-    </div>
+<script>
+    // タブ切り替えロジック
+    function switchTab(evt, sectionId) {
+        const tabContents = document.getElementsByClassName("tab-content");
+        for (let i = 0; i < tabContents.length; i++) {
+            tabContents[i].classList.remove("active");
+        }
 
-    <div class="question">
-        <p><strong>問12</strong> MMSについて述べた以下の文の空欄に当てはまる語句として、最も適当な組み合わせを①～⑧のうちから1つ選べ。（選択肢：マルチメディア、キャリアメール、データ回線 等）<br>
-        MMSは（ア）メッセージングサービスの略称である。SMSと異なり、携帯端末で撮影した写真等を添付することができる。相手の携帯端末に送るには（イ）のアドレスが必要である。（ウ）回線を利用して送るので、定額接続サービスを利用範囲内であれば通信料金が加算されることはない。</p>
-        <p class="answer">解答： ⑥ （ア：マルチメディア、イ：キャリアメール、ウ：データ）</p>
-        <div class="explanation">
-            <p>解説: MMS（Multimedia Messaging Service）はキャリアメール（@docomo等）のアドレスを使い、パケット通信（データ回線）を利用するため、画像添付が可能です。</p>
-        </div>
-    </div>
+        const tabButtons = document.getElementsByClassName("tab-btn");
+        for (let i = 0; i < tabButtons.length; i++) {
+            tabButtons[i].classList.remove("active");
+        }
 
-    <div class="question">
-        <p><strong>問13</strong> メールアドレスに関する説明文の、空欄に入れる語句の組み合わせとして、もっとも適当なものを①～⑧から1つ選べ。（例：sample @ XXXXX.co.jp）<br>
-        メールアドレスの@の左側をローカルパート、右側を（ア）という。（ア）の中でドットで区切られた最も右の文字列を（イ）といい、国名や、組織の種類を表している。例えば、comは（ウ）であることを表す。（選択肢：ドメインパート、TLD、商業組織 等）</p>
-        <p class="answer">解答： ⑤ （ア：ドメインパート、イ：TLD、ウ：商業組織）</p>
-        <div class="explanation">
-            <p>解説:<br>
-            @の右側全体＝ドメインパート（ドメイン名）。<br>
-            一番右＝TLD（Top Level Domain）。<br>
-            .com は commercial（商業組織）を表します。</p>
-        </div>
-    </div>
+        document.getElementById(sectionId).classList.add("active");
+        evt.currentTarget.classList.add("active");
+    }
 
-    <div class="question">
-        <p><strong>問14</strong> メールアドレスの@の右側で、ドットで区切られた右から2番目、この図では.coに当たる部分の文字列は（エ）といい、国内における組織の種類等を表している。例えばedは（オ）、lgは（カ）であることを表しており、これらは「問13の（イ）」の管理団体が割り当てている。現在.jpの管理を担っている「日本レジストリサービス」は厳格な審査に定評があり、jpは国際的にも信頼度が高い。（選択肢：SLD、初等中等教育機関、地方自治体 等）</p>
-        <p class="answer">解答： ⑤ （エ：SLD、オ：初等中等教育機関、カ：地方自治体）</p>
-        <div class="explanation">
-            <p>解説:<br>
-            右から2番目＝SLD（Second Level Domain）。<br>
-            ed.jp は education（初等中等教育機関：小中高など）<br>
-            lg.jp は local government（地方自治体）</p>
-        </div>
-    </div>
+    // 解説アコーディオン開閉ロジック
+    function toggleExplanation(button) {
+        const explainBox = button.nextElementSibling;
+        if (explainBox.classList.contains("show")) {
+            explainBox.classList.remove("show");
+            button.classList.remove("open");
+            button.textContent = "解説を表示";
+        } else {
+            explainBox.classList.add("show");
+            button.classList.add("open");
+            button.textContent = "解説を閉じる";
+        }
+    }
 
-    <div class="question">
-        <p><strong>問15</strong> 問13の（イ）（TLD）について、アルファベットと国名の組み合わせとして、もっとも適当なものを①～⑧から1つ選べ。（選択肢：cn, uk, de と 中国、英国、ドイツ等の組み合わせ）</p>
-        <p class="answer">解答： ③ （cn:中国、uk:英国、de:ドイツ）</p>
-        <div class="explanation">
-            <p>解説: 国別コードトップレベルドメイン（ccTLD）の知識です。</p>
-        </div>
-    </div>
+// 👇 ここを追加：右クリックを禁止してアラートを出す
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        alert('このサイトはコンテンツのコピーを禁止しています。');
+    });
 
-    <div class="question">
-        <p><strong>問16</strong> 電子メールを送る際の注意事項を述べた以下の文の空欄に当てはまる語句として、最も適当な組み合わせを①～⑨のうちから1つ選べ。（選択肢：件名、迷惑メール 等）<br>
-        電子メールを送るときは、メールの内容に応じた（ア）を書くことが望ましい。（中略）しかし（ア）が書かれていないと（イ）メールと判断されて削除されたり、（ア）が無いために他のメールに紛れて埋もれてしまう可能性がある。</p>
-        <p class="answer">解答： ② （ア：件名、イ：迷惑）</p>
-        <div class="explanation">
-            <p>解説: 電子メールでは「件名（Subject）」が必須マナーです。件名がないとスパム判定（迷惑メール扱い）されやすくなります。</p>
-        </div>
-    </div>
+    // 👇 ここを追加：ショートカットキー（Ctrl+Cなど）でのコピーも禁止
+    document.addEventListener('copy', function(e) {
+        e.preventDefault();
+    });
 
-    <div class="question">
-        <p><strong>問17</strong> 電子メールはパソコンのモニタ画面で見ることを想定して、ある程度の文字数毎に改行するのが望ましい。その「ある程度の文字数」として、最も適当な値を①～⑥のうちから1つ選べ。</p>
-        <p class="answer">解答： ② （30～40文字程度）</p>
-        <div class="explanation">
-            <p>解説: 日本語のメール慣習では、読みやすさを考慮して全角30～35文字（多くても40文字）程度で改行を入れるのがマナーとされています。</p>
-        </div>
-    </div>
-
-    <div class="question">
-        <p><strong>問18</strong> 電子メールの宛先の1つ、BCCは何を略した言葉か。もっとも適当なものを①～⑨から1つ選べ。（選択肢：Blind Carbon Copy 等）</p>
-        <p class="answer">解答： ⑧ （Blind Carbon Copy）</p>
-        <div class="explanation">
-            <p>解説: BCC（Blind Carbon Copy）の正式名称です。Bccで送られた相手のアドレスは、他の受信者からは見えません。</p>
-        </div>
-    </div>
-
-    <div class="question">
-        <p><strong>問19</strong> 電子メールを送る以下の場面で、送信先のメールアドレスをどこに記述すべきか、場面毎の記述先の組み合わせとしてもっとも適当なものを①～⑥から1つ選べ。<br>
-        場面A：授業の課題ファイルを添付して送信する、先生から指示されたメールアドレス 場面B：自社の特別キャンペーンを顧客に対して一斉に送信する、各顧客のメールアドレス</p>
-        <p class="answer">解答： ② （場面A: To、場面B: Bcc）</p>
-        <div class="explanation">
-            <p>解説:<br>
-            場面A: 提出先（先生）は明確な宛先なのでTo。<br>
-            場面B: 顧客同士のアドレスが見えてはいけない（個人情報漏洩になる）ため、Bccを用います。</p>
-        </div>
-    </div>
-
-    <div class="question">
-        <p><strong>問20～22（共通設定）</strong><br>
-        電子メールを送るときに、A君からF君の6人のアドレスを次のように入力した。<br>
-        To: A君のアドレス、B君のアドレス<br>
-        Cc: C君のアドレス、D君のアドレス<br>
-        Bcc: E君のアドレス、F君のアドレス</p>
-        <p><strong>問20</strong> 自分以外、誰に同じ電子メールが送られたか、A君に分かることについて述べた以下の各文の空欄に入る語句の組み合わせを選べ。<br>
-        ・A君には、B君のアドレスに同じ電子メールが送られていることが（ア）。<br>
-        ・A君には、C君のアドレスに同じ電子メールが送られていることが（イ）。<br>
-        ・A君には、E君のアドレスに同じ電子メールが送られていることが（ウ）。</p>
-        <p class="answer">解答： ② （ア：分かる、イ：分かる、ウ：分からない）</p>
-        <div class="explanation">
-            <p>解説: A君はToの受信者です。受信者は、自分以外のTo（B君）とCc（C, D君）のアドレスは確認できますが、Bcc（E, F君）のアドレスは確認できません。</p>
-        </div>
-    </div>
-
-    <div class="question">
-        <p><strong>問21</strong> 自分以外、誰に同じ電子メールが送られたか、C君に分かることについて（省略）</p>
-        <p class="answer">解答： ② （ア：分かる、イ：分かる、ウ：分からない）</p>
-        <div class="explanation">
-            <p>解説: C君はCcの受信者です。Toの受信者と同様に、To（A, B君）とCc（D君）のアドレスは確認できますが、Bcc（E, F君）のアドレスは確認できません。</p>
-        </div>
-    </div>
-
-    <div class="question">
-        <p><strong>問22</strong> 自分以外、誰に同じ電子メールが送られたか、E君に分かることについて（省略）</p>
-        <p class="answer">解答： ② （ア：分かる、イ：分かる、ウ：分からない）</p>
-        <div class="explanation">
-            <p>解説: E君はBccの受信者です。<br>
-            E君からは、正規の宛先であるTo（A, B君）とCc（C, D君）のアドレスは確認できます。<br>
-            しかし、自分以外のBcc（F君）のアドレスは確認できません。</p>
-        </div>
-    </div>
-    
-    <h2>第2問：デザイン・データ表現・マルチメディア</h2>
-
-    <div class="question">
-        <p><strong>問1</strong> 言葉のデザインについて述べた以下の文の空欄に当てはまる語句として、最も適当な組み合わせを①～⑧のうちから1つ選べ。（選択肢：体験、社会情報、推敲 等）<br>
-        デザインとは「（ア）を通して思考（心）や行動を変える取り組み」をいう。（中略）言葉のデザインは言葉＝（イ）の発信を通して、人の思考や行動を変える。そこで必要な行為が言葉の「選択」であり、「（ウ）」である。</p>
-        <p class="answer">解答： ⑧ （ア：体験、イ：社会情報、ウ：推敲）</p>
-        <div class="explanation">
-            <p>解説: デザインはUX（ユーザー体験）の設計です。言葉は意味を持つ「社会情報」であり、相手に伝わるように練り直す「推敲」が不可欠です。</p>
-        </div>
-    </div>
-
-    <div class="question">
-        <p><strong>問2</strong> 2024年の日本の広告費（CMや折込広告、バナー広告等全てを含む）はおよそいくらか。概数として最も近い値を①～⑧から1つ選べ。（参考）2024年の国家予算は約110兆円です。</p>
-        <p class="answer">解答： ⑤ （7兆円）</p>
-        <div class="explanation">
-            <p>解説: 日本の総広告費は近年約7兆円前後で推移しています（2023年実績で約7.3兆円）。</p>
-        </div>
-    </div>
-
-    <div class="question">
-        <p><strong>問3</strong> いいキャッチコピーを作るときに持つべき基本的な心構えを①～⑤から1つ選べ。</p>
-        <p class="answer">解答： ⑤ （ターゲットや目的を論理的に分析し、考え続ける）</p>
-        <div class="explanation">
-            <p>解説: キャッチコピーは「ひらめき」ではなく、ターゲットや目的を分析して論理的に考え続けるプロセスから生まれます。</p>
-        </div>
-    </div>
-
-    <div class="question">
-        <p><strong>問4</strong> キャッチコピーを作るときに持つべき視点、観点として当てはまらないものを①～⑧から1つ選ぶか、または⑨を選べ。</p>
-        <p class="answer">解答： ⑦ （「世界を変える」「人生を変える」）など大きな夢を書く）</p>
-        <div class="explanation">
-            <p>解説: 「大きな夢を書く」手法はだれにでも可能な表現でであり、それでいて具体性に欠け、現実味が乏しいため、避けるべき観点です。</p>
-        </div>
-    </div>
-
-    <div class="question">
-        <p><strong>問5</strong> キャッチコピーを完成させるときに、あらためて確認する必要がないことを①～⑨から1つ選べ。</p>
-        <p class="answer">解答： ⑥ （どのようなフォント（書体）を使うか）</p>
-        <div class="explanation">
-            <p>解説: キャッチコピー（言葉そのもの）を完成させる段階の話です。「どのようなフォントを使うか」は、コピーが完成した後の「ビジュアルデザイン」の領域であるため、純粋なコピー作成時のチェック項目としては優先度が下がります。</p>
-        </div>
-    </div>
-
-    <div class="question">
-        <p><strong>問6</strong> データについて述べた以下の文の空欄に入れる語句や記号の組み合わせとしてもっとも適当なものを、①～⑧から1つ選べ。<br>
-        データとは「人間、または機械が測定、収集した数値や文字、およびそれらを基に計算した結果とその集合体」を示す言葉であり、「情報」（ア）。その両者の関係は「データ（イ）情報」と表すことができる。コンピュータ内部のデータはすべて2進数で表現できる（ウ）データである。</p>
-        <p class="answer">解答： ⑥ （ア：の一部といえる、イ：（、ウ：デジタル）</p>
-        <div class="explanation">
-            <p>解説: 多くの「情報」のうち、人が分析、調査の対象としたものがデータです。コンピュータは0と1の2進数で表現できるデジタルデータを扱います。</p>
-        </div>
-    </div>
-
-    <div class="question">
-        <p><strong>問7</strong> 【データ1】（10010110）に示す2進数のデータ量について、正しい表示どうしの組み合わせを①～⑧から1つ選べ。</p>
-        <p class="answer">解答： ⑤ （8 bit、1 Byte）</p>
-        <div class="explanation">
-            <p>解説: 10010110 は8桁の2進数なので 8 bit です。8 bit = 1 Byte なので、この組み合わせが正解です。</p>
-        </div>
-    </div>
-
-    <div class="question">
-        <p><strong>問8</strong> 1Byteと1kBの関係について述べた以下の文の空欄（カ）（キ）に入れる数値として、もっとも適当な組み合わせを、①～⑨から1つ選べ。<br>
-        デジタルデータの1kB（キロバイト）は（カ）Byteを意味する。これは（カ）が2の（キ）乗であるため、2進数にとって都合がよい。</p>
-        <p class="answer">解答： ⑧ （カ：1024、キ：10）</p>
-        <div class="explanation">
-            <p>解説: 情報の世界では $2^{10} = 1024$ なので、$1 \text{ kB} = 1024 \text{ Byte}$ として扱うことが計算上都合が良いです。</p>
-        </div>
-    </div>
-
-    <div class="question">
-        <p><strong>問9</strong> データ量を大きい（多い）ものから順に並べたとき、並びが誤っているものを①～⑧から1つ選べ。</p>
-        <p class="answer">解答： ⑦ （1TB > 1GB > 1YB）</p>
-        <div class="explanation">
-            <p>解説: 単位の順序は K < M < G < T < P < E < Z < Y です。YB（ヨタバイト）はTB（テラバイト）より遥かに大きいため、1YB > 1TB > 1GB が正しい順序となり、⑦は誤りです。</p>
-        </div>
-    </div>
-
-    <div class="question">
-        <p><strong>問10</strong> インターネットサイトを閲覧した時に文字化けが起こった時に、文字化けの原因・理由として通常、第一に考えるべきこととしてもっとも適当なものを①～⑥から1つ選べ。</p>
-        <p class="answer">解答： ⑤ （サイトの文字コードと、閲覧側の文字コードが一致していない）</p>
-        <div class="explanation">
-            <p>解説: 文字化けの第一の原因は、文字コード（Shift_JISとUTF-8など）の不一致です。</p>
-        </div>
-    </div>
-
-    <div class="question">
-        <p><strong>問11</strong> 【データ2】は、その下のASCIIに基づいた16進数である。このデータの内容にもっとも当てはまる語句を、①～⑨から1つ選べ。<br>
-        【データ2】 57 68 61 74 20 69 73 20 6F 75 72 20 73 63 68 6F 6F 6C 20 63 6F 6C 6F 72 3F</p>
-        <p class="answer">解答： ⑦（美方高校のスクールカラーは青）</p>
-        <div class="explanation">
-            <p>解説: ASCIIコード表を使って解読します。デコード結果は「What is our school color?」（私たちのスクールカラーは何？）という質問文です。したがって、正解は美方高校のスクールカラーである青色です。</p>
-        </div>
-    </div>
-
-    <div class="question">
-        <p><strong>問12</strong> 色のデジタル化について述べた以下の文の空欄に当てはまる語句として、もっとも適当な組み合わせを、①～⑧から1つ選べ。（中略）人が色をイメージしやすい順に並べると（ア）、（イ）、（ウ）となる。</p>
-        <p class="answer">解答： ① （ア：カラーネーム、イ：HSB、ウ：RGB）</p>
-        <div class="explanation">
-            <p>解説: 直感的なのは名前（カラーネーム）、次に人間の感覚に近い属性（色相・彩度・明度＝HSB）、機械的なのが光の三原色（RGB）です。</p>
-        </div>
-    </div>
-
-    <div class="question">
-        <p><strong>問13</strong> ブラウザ（HTML/CSS）で色を指示できる語句を①～⑧から1つ選べ。</p>
-        <p class="answer">解答： ⑦ （tomato）</p>
-        <div class="explanation">
-            <p>解説: HTML/CSSで定義されている色名（Webカラー）には tomato や chocolate、salmonなどがありますが、選択肢の中で有効なのは tomato です。</p>
-        </div>
-    </div>
-
-    <div class="question">
-        <p><strong>問14</strong> 問12（イ）（HSB）について、述べた以下の文の空欄に当てはまるもっとも適当な語句を①～⑧から1つ選べ。<br>
-        人は色を説明するときに「赤みを増して」「もっと明るい方がいいな」「くすんだ感じにして」のように表現する。この色の特性を色相、明度、（　　）で数値化したのが問12の（イ）である。</p>
-        <p class="answer">解答： ② （彩度）</p>
-        <div class="explanation">
-            <p>解説: 色の三属性は、色相（Hue）、明度（Brightness/Value）、彩度（Saturation）です。HSBはこの三属性で色を表現します。</p>
-        </div>
-    </div>
-
-    <div class="question">
-        <p><strong>問15</strong> 問12（ウ）（RGB）のデータと色の組み合わせについて、正しく述べている文を①～⑦から1つ選べ。<br>
-        （#000000=黒、#FF0000=赤、#00FF00=黄、#FFFF00=緑、#0000FF=青、#FFFFFF=白）</p>
-        <p class="answer">解答： ④ （ウとエのみ間違えている）</p>
-        <div class="explanation">
-            <p>解説: カラーコード（16進数）の知識です。（#00FF00は緑、#FFFF00は黄が正しい）</p>
-        </div>
-    </div>
-
-    <div class="question">
-        <p><strong>問16</strong> 画像のデータ量に関する以下の文の空欄に当てはまる、もっとも適当な語句の組み合わせを、①～⑧から1つ選べ。<br>
-        8×8の計64マスの画像を白黒のみで表現する場合は（ア）、同じ64マスを16色で表現する場合は1マスあたり（イ）必要になるので、全体で（ウ）のデータ量が必要である。</p>
-        <p class="answer">解答： ⑤ （ア：8 Byte、イ：4 Bit、ウ：32 Byte）</p>
-        <div class="explanation">
-            <p>解説:<br>
-            ア: 白黒2値＝1画素1 bit。64画素 → 64 bit = 8 Byte<br>
-            イ: 16色表現には $2^4 = 16$ なので、1画素あたり 4 bit が必要。<br>
-            ウ: 64画素 × 4 bit = 256 bit = 32 Byte</p>
-        </div>
-    </div>
-
-    <div class="question">
-        <p><strong>問17</strong> 以下の文の空欄に当てはまる、もっとも適当な語句を、①～⑧から1つ選べ。<br>
-        パソコン内の画像データの量を確認すると、問16の方法で計算した値に比べて小さい。これは通信量やメモリ容量を圧迫しないようにデータを（　　）しているためである。</p>
-        <p class="answer">解答： ⑥ （圧縮）</p>
-        <div class="explanation">
-            <p>解説: 画像データ（JPEGなど）は、保存時に容量を減らすために圧縮されています。</p>
-        </div>
-    </div>
-
-    <div class="question">
-        <p><strong>問18</strong> データとファイル形式の組み合わせについて、誤っている組み合わせを①～⑦から1つ選べ。<br>
-        （png, jpeg, gif, wav, wma, mp3, mp4 と画像・音声・動画の組み合わせ）</p>
-        <p class="answer">解答： ④ （wav - 画像）</p>
-        <div class="explanation">
-            <p>解説: WAV は（非圧縮の）音声ファイル形式であり、画像ではありません。</p>
-        </div>
-    </div>
-
-    <div class="question">
-        <p><strong>問19</strong> 【データ3】はファクシミリへ送られてきたデータである。このデータから元の画像を再現し、その内容ともっとも関係の深い名称を、①～⑨から1つ選べ。なお、このデータはランレングス法で処理されている。
-        <p> 【Data 3】<br>
- 92 02 83 02 83 02 84 02 83 02 83 02 84 0C 89 02 89<br>
- 02 83 02 83 02 84 02 83 02 83 02 84 0C 94 0C 84 02<br>
- 88 02 84 02 88 02 84 02 88 02 84 02 88 02 84 0C 92 </p></p>
-        <p class="answer">解答： ⑨ （主任）</p>
-        <div class="explanation">
-            <p>解説: ランレングス法（連長圧縮）のデコード問題です。このデータ列を「白が○個、黒が○個」と復元してマス目を埋めると、文字が浮かび上がります。</p>
-        </div>
-    </div>
-
-    <div class="question">
-        <p><strong>問20</strong> 以下は、アナログデータをデジタルデータに変換する手順を説明する図である。【手順ア】【手順イ】の名称としてもっとも適当な組み合わせを、①～⑥から1つ選べ。<br>
-        手順ア：一定の時間間隔で値を取得する。 手順イ：取得した値を整数値で表す。（選択肢：標本化、量子化、符号化）</p>
-        <p class="answer">解答： ④ （【手順ア】：標本化、【手順イ】：量子化）</p>
-        <div class="explanation">
-            <p>解説: A/D変換の3ステップは以下の通りです。<br>
-            横軸（時間）で区切る＝標本化（サンプリング）【手順ア】<br>
-            縦軸（電圧）の値を決める＝量子化【手順イ】<br>
-            2進数にする＝符号化</p>
-        </div>
-    </div>
-
-    <div class="question">
-        <p><strong>問21</strong> 【データ4】は量子化ビット数4のデジタルデータである。デジタル化する前のデータに最も近い波形を①～⑨から1つ選べ。<br>
-        （データ列：0, 1, ..., 15 までの数値の並び）
-        <p>【Data 4】<br>
-            0 1 0 1 0 0 1 1 0 0 1 0 0 0 1 0 0 0 1 1 0 1 0 1<br>
-1 0 0 1 1 0 1 1 1 1 0 0 1 0 1 0 0 1 0 1 0 0 1 1<br>
-0 0 1 0 0 0 0 1 0 0 1 0 0 1 0 1 1 0 1 0 1 1 0 1<br>
-1 1 1 0 1 1 0 1 1 0 1 0 0 1 0 1 0 1 0 0 1 0 0 0
-        </p>
-        </p>
-        <p class="answer">解答： ⑦</p>
-        <div class="explanation">
-            <p>解説: データ（4bit区切り）を10進数に戻してグラフの形を読み取ります。データ列は順に　5, 3, 2, 2, 3, 5, 9, 11, 12（以下略）</p>
-        </div>
-    </div>
-    
-    <script>
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault(); // 右クリックメニューを禁止
-        });
-        document.addEventListener('keydown', function(e) {
-            // F12キー、Ctrl+Shift+I（開発者ツールの起動）を禁止
-            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
-                e.preventDefault();
-            }
-            // Ctrl+U（ソースコード表示）を禁止
-            if (e.ctrlKey && e.key === 'U') {
-                e.preventDefault();
-            }
-            // Ctrl+C（コピー）を禁止
-            if (e.ctrlKey && e.key === 'c') {
-                e.preventDefault();
-            }
-        });
-    </script>
+</script>
 
 </body>
 </html>
